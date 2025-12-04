@@ -1,0 +1,53 @@
+.header {
+  /* border: 1px aqua solid; */
+  text-align: center;
+  max-width: 880px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+.header__logo {
+  width: 173px;
+  height: 33px;
+  margin: 0;
+  padding-left: 10vw;
+  padding-bottom: 50px;
+  padding-top: 40px;
+  /* border: 1px red solid; */
+}
+.header__line {
+  /* Line */
+  position: absolute;
+  width: 80%;
+  height: 0;
+  left: 10vw;
+  top: 100px;
+  opacity: 0.7;
+  border: 1px solid #545454;
+}
+.header__message {
+  text-align: center;
+  font-family: Inter;
+  font-weight: normal;
+  font-size: 12px;
+  color: white;
+}
+.header__link {
+  text-align: center;
+  font-family: Inter;
+  font-weight: normal;
+  font-size: 12px;
+  color: white;
+  text-decoration: none;
+}
+.header__link:hover {
+  color: blueviolet;
+}
+
+@media screen AND (max-width: 400px) {
+  .header__logo {
+    content: url("../images/LogoPeq.png");
+    width: 79px;
+    height: 16;
+  }
+}

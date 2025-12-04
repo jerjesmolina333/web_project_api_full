@@ -1,0 +1,35 @@
+.imagen__display {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  z-index: 2;
+  position: absolute;
+  /* border: 1px aqua solid; */
+}
+.imagen__container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+}
+.card__image {
+  max-width: 500px;
+  height: auto;
+  width: 60vw;
+  z-index: 2;
+}
+.imagen__pic {
+  max-width: 500px;
+  height: auto;
+  width: 60vw;
+  z-index: 2;
+}
+@media screen AND (max-width: 700px) {
+  .imagen__pic {
+    max-width: 400px;
+  }
+}
+@media screen AND (max-width: 550px) {
+  .imagen__pic {
+    max-width: 300px;
+  }
+}

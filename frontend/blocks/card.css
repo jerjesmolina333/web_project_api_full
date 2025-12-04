@@ -1,0 +1,97 @@
+.card__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 282px;
+
+  /* z-index: 1; */
+}
+.popup-imag__container {
+  z-index: 100;
+}
+
+.cards__container {
+  max-width: 880px;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 17px;
+  row-gap: 20px;
+  justify-content: center;
+  margin: auto;
+  padding: 20px 0;
+}
+/* .cards__list {
+  list-style-type: none;
+} */
+/* .card__description {
+  display: flex;
+  flex-direction: column;
+} */
+/* .botonLikeCarta {
+  width: 150px;
+} */
+
+.card__pic {
+  height: auto;
+  width: 282px;
+  height: 320px;
+  border-radius: 6px;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  object-fit: cover;
+}
+.card__trash {
+  position: relative;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  left: -127px;
+  top: 23px;
+}
+.card__group {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  background-color: white;
+  border-radius: 6px;
+  align-items: center;
+  padding: 0 10px;
+  margin: 0;
+}
+
+.card__name {
+  font-family: Inter;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: black;
+  max-width: 215px;
+  height: 30px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.card__like-button {
+  width: 21px;
+  height: 19px;
+}
+.card__like-button_is-active {
+  background-image: url("../images/Like2.png");
+}
+/********************************/
+/* Controles para responsividad */
+
+@media screen AND (max-width: 300px) {
+  .element__container {
+    width: 175px;
+  }
+}
+@media screen AND (max-width: 210px) {
+  .element__container {
+    width: 150px;
+  }
+}
