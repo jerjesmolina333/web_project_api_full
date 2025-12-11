@@ -46,16 +46,16 @@ const Signup = ({ handleRegistration }) => {
           <label className="popup__field">
             <input
               type="text"
-              className="popup__input popup__input_type_card-name"
+              className="popup__input popup__input_type_name"
               maxLength="40"
               minLength="2"
-              id="email"
-              name="email"
-              placeholder="Correo electrónico"
+              id="name"
+              name="name"
+              placeholder="Nombre"
               onChange={handleChange}
               required
             />
-            <span className="popup__input_type_error email-error"></span>
+            <span className="popup__input_type_error name-error"></span>
           </label>
           <label className="popup__field">
             <input
@@ -73,6 +73,49 @@ const Signup = ({ handleRegistration }) => {
               className="popup__input_type_error acerca-error"
               id="password-error"
             ></span>
+          </label>
+          <label className="popup__field">
+            <input
+              type="text"
+              className="popup__input popup__input_type_email"
+              maxLength="40"
+              minLength="2"
+              id="email"
+              name="email"
+              placeholder="Correo electrónico"
+              onChange={handleChange}
+              required
+            />
+            <span className="popup__input_type_error email-error"></span>
+          </label>
+          <label className="popup__field">
+            <input
+              type="text"
+              className="popup__input popup__input_type_acerca"
+              maxLength="40"
+              minLength="4"
+              id="about"
+              name="about"
+              placeholder="Ocupación"
+              onChange={handleChange}
+              required
+            />
+            <span className="popup__input_type_error about-error"></span>
+          </label>
+
+          <label className="popup__field">
+            <input
+              type="text"
+              className="popup__input popup__input_type_avatar"
+              maxLength="80"
+              minLength="4"
+              id="avatar"
+              name="avatar"
+              placeholder="Foto"
+              onChange={handleChange}
+              required
+            />
+            <span className="popup__input_type_error avatar-error"></span>
           </label>
 
           <button

@@ -1,4 +1,5 @@
 import { celebrate, Joi } from "celebrate";
+import express from "express";
 import User from "../models/user.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
@@ -9,6 +10,7 @@ import NotFoundError from "../errors/not-found-err.js";
 // Para validación:
 import { validateBody } from "./middleware/validation.js";
 import { loginSchema } from "../validation/schemas.js";
+
 dotenv.config();
 
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -38,29 +40,56 @@ export const createUser = async (req, res) => {
     })
     // .catch((err) => res.status(400).send(err));
     .catch((err) => {
-      return new BadRequestError(err.message);
+      res.status(400).send({ message: err.message }); // ✅ Envía respuesta
     });
 };
 
 export async function login(req, res) {
-  // console.log("LOGIN===");
-
+  console.log("Backend -> login ===");
+  console.log("req.body completo:", req.body);
+  console.log("typeof req.body:", typeof req.body);
   const { email, password } = req.body;
-  // console.log("email: ", email, " password: ", password);
+  console.log("email extraído:", email, "tipo:", typeof email);
+  console.log("password extraído:", password, "tipo:", typeof password);
+  console.log("Backend -> email: ", email, " password: ", password);
 
-  return User.findUserByCredentials(email, password)
+  // 1. Buscar usuario por email
+  User.findOne({ email })
     .then((user) => {
-      // console.log("Se encontró el usuario");
-      const token = jwt.sign(
-        { _id: user._id },
-        NODE_ENV === "production" ? JWT_SECRET : "frase-secreta",
-        { expiresIn: "7d" }
-      );
-      res.send({ token });
-      // setToken(token);
+      console.log("Usuario encontrado:", user); // NUEVO LOG
+      if (!user) {
+        console.log("Usuario no encontrado");
+        return res
+          .status(401)
+          .send({ message: "Email o contraseña incorrectos" });
+      }
+
+      console.log("user.password:", user.password); // NUEVO LOG
+      console.log("password a comparar:", password); // NUEVO LOG
+
+      // 2. Comparar contraseña
+      return bcrypt.compare(password, user.password).then((isMatch) => {
+        if (!isMatch) {
+          console.log("Contraseña incorrecta");
+          return res
+            .status(401)
+            .send({ message: "Email o contraseña incorrectos" });
+        }
+
+        // 3. Crear JWT
+        console.log("Credenciales correctas, creando token");
+        const token = jwt.sign(
+          { _id: user._id },
+          NODE_ENV === "production" ? JWT_SECRET : "frase-secreta",
+          { expiresIn: "7d" }
+        );
+
+        res.send({ token });
+      });
     })
     .catch((err) => {
-      res.status(401).send({ message: err.message });
+      console.log("ERROR en login:", err.message);
+      res.status(500).send({ message: "Error interno del servidor" });
     });
 }
 
@@ -83,16 +112,16 @@ export async function getUserByMail(req, res) {
   User.findOne({ email: email })
     .orFail(() => {
       if (err == DocumentNotFoundError) {
-        // const error = new Error(
-        //   "No se ha encontrado ningun usuario con ese email"
-        // );
-        // error.statusCode = 404;
-        // throw error;
+        const error = new Error(
+          "No se ha encontrado ningun usuario con ese email"
+        );
+        error.statusCode = 404;
+        throw error;
         throw new NotFoundError("No se encontró un usuario con ese email");
       } else {
-        // const error = new Error("Error al buscar usuario");
-        // error.statusCode = 400;
-        // throw error;
+        const error = new Error("Error al buscar usuario");
+        error.statusCode = 400;
+        throw error;
         throw new NotFoundError("Error al buscar usuario");
       }
     })
@@ -109,16 +138,16 @@ export async function updateUser(req, res, next) {
     .patch({ _id: id, name, about, avatar })
     .orFail(() => {
       if (err == DocumentNotFoundError) {
-        // const error = new Error(
-        //   "No se ha encontrado ningun usuario con esa id"
-        // );
-        // error.statusCode = 404;
-        // throw error;
+        const error = new Error(
+          "No se ha encontrado ningun usuario con esa id"
+        );
+        error.statusCode = 404;
+        throw error;
         throw new NotFoundError("No se encontró un usuario con ese email");
       } else {
-        // const error = new Error("Error al actualizar usuario");
-        // error.statusCode = 400;
-        // throw error;
+        const error = new Error("Error al actualizar usuario");
+        error.statusCode = 400;
+        throw error;
         throw new BadRequestError("Error al actualizar usuario");
       }
     })
@@ -134,18 +163,18 @@ export async function updateAvatar(req, res) {
     .patch({ _id: id, avatar, next })
     .orFail(() => {
       if (err == DocumentNotFoundError) {
-        // const error = new Error(
-        //   "No se ha encontrado ningun usuario con esa id"
-        // );
-        // error.statusCode = 404;
-        // throw error;
+        const error = new Error(
+          "No se ha encontrado ningun usuario con esa id"
+        );
+        error.statusCode = 404;
+        throw error;
         throw new NotFoundError(
           "No se ha encontrado ningun usuario con esa id"
         );
       } else {
-        // const error = new Error("Error al actualizar avatar de usuario");
-        // error.statusCode = 400;
-        // throw error;
+        const error = new Error("Error al actualizar avatar de usuario");
+        error.statusCode = 400;
+        throw error;
         throw new BadRequestError("Error al actualizar avatar de usuario");
       }
     })

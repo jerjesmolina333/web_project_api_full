@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     minlength: 4,
     required: true,
-    select: false,
+    // select: false,
   },
   email: {
     type: String,
@@ -49,25 +49,27 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.statics.findUserByCredentials = async function findUserByCredentials(
-  email,
-  password
-) {
-  return this.findOne({ email })
-    .select("+password")
-    .then((user) => {
-      if (!user) {
-        return Promise.reject(new Error("email o password incorrectos"));
-      }
-      return bcrypt.compare(password, user.password).then((matched) => {
-        if (!matched) {
-          return Promise.reject(new Error("Incorrect email or password"));
-        }
+// userSchema.statics.findUserByCredentials = async function findUserByCredentials(
+//   email,
+//   password
+// ) {
+//   console.log("## FindUserByCredentials ##");
+//   console.log("Email:", email);
+//   return this.findOne({ email })
+//     .select("+password")
+//     .then((user) => {
+//       if (!user) {
+//         return Promise.reject(new Error("email o password incorrectos"));
+//       }
+//       return bcrypt.compare(password, user.password).then((matched) => {
+//         if (!matched) {
+//           return Promise.reject(new Error("Incorrect email or password"));
+//         }
 
-        return user; // ahora user está disponible
-      });
-    });
-};
+//         return user; // ahora user está disponible
+//       });
+//     });
+// };
 
 // module.exports = mongoose.model("user", userSchema);
 const User = mongoose.model("user", userSchema);

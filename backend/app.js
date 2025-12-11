@@ -9,16 +9,14 @@ import { requestLogger, errorLogger } from "./controllers/middleware/logger.js";
 import { errors } from "celebrate";
 
 // const { PORT = 3000, BASE_PATH } = process.env;
-const { PORT = 3000 } = process.env;
-
-const mongoUrl =
-  process.env.NODE_ENV === "production"
-    ? "mongodb://jerjesm.online:27017/aroundb"
-    : "mongodb://localhost:27017/aroundb";
+const { PORT = 3000, MONGO_URI } = process.env;
 
 mongoose
-  // .connect(mongoUrl)
-  .connect("mongodb://localhost:27017/aroundb")
+  // .connect("mongodb://localhost:27017/aroundb")
+  .connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(function () {
     console.log("Conectado a la base de datos");
   })
@@ -33,6 +31,7 @@ app.use(cors());
 app.options("/", cors()); //habilitar las solicitudes de todas las rutas
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/crash-test", () => {
   setTimeout(() => {
@@ -50,19 +49,25 @@ app.post("/signin", login);
 app.post("/signup", createUser);
 
 // Rutas protegidas (con middleware de autenticación)
+//
+//
+//
+//
+//
 app.use("/users", getTokenInfo, routerUsers);
 app.use("/cards", getTokenInfo, routerCards);
 
 app.use(errors()); // controlador de errores de celebrate
 
 // aquí manejamos todos los errores
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({
-    message:
-      statusCode === 500 ? "Se ha producido un error en el servidor" : message,
-  });
-});
+// app.use((err, req, res, next) => {
+//   console.log(err);
+//   const { statusCode = 500, message } = err;
+//   res.status(statusCode).send({
+//     message:
+//       statusCode === 500 ? "Se ha producido un error en el servidor" : message,
+//   });
+// });
 
 app.listen(PORT, () => {
   console.log(`Ya está el servidor listo en el puerto ${PORT}`);

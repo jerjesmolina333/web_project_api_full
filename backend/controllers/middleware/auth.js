@@ -8,14 +8,12 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 function getTokenInfo(req, res, next) {
   // Obtener el token del header Authorization
   const { authorization } = req.headers;
-
   if (!authorization || !authorization.startsWith("Bearer ")) {
-    throw new UnauthorizedError("Autorización requerida");
+    console.log("ERROR: Autorización requerida");
+    // throw new UnauthorizedError("Autorización requerida");
   }
-
   // Extraer el token (quitar "Bearer ")
   const token = authorization.replace("Bearer ", "");
-
   try {
     // Verificar el token JWT
     const payload = jwt.verify(
@@ -25,7 +23,8 @@ function getTokenInfo(req, res, next) {
     req.user = payload; // Añadir el payload al objeto req
     next(); // Continuar al siguiente middleware
   } catch (err) {
-    throw new UnauthorizedError("Token inválido");
+    console.log("ERROR: Token inválido");
+    // throw new UnauthorizedError("Token inválido");
   }
 }
 

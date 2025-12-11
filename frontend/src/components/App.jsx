@@ -13,7 +13,6 @@ import Footer from "../components/Footer/Footer.jsx";
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute.jsx";
 import Signin from "../components/Signin/Signin.jsx";
 import Signup from "../components/Signup/Signup.jsx";
-import RegisterOK from "./Popups/RegisterOK.jsx";
 import * as auth from "../utils/auth";
 import Api from "../utils/Api.js";
 import { setToken, getToken } from "../utils/token.js";
@@ -30,16 +29,14 @@ function App() {
 
   const params = {
     headers: {
-      authorization: "082ad1cf-6751-4277-bd54-4a8ddfdec0e7",
+      authorization: import.meta.env.VITE_AUTH_TOKEN,
     },
   };
 
   const api = new Api(
     {
-      // linkUser: "https://around-api.es.tripleten-services.com/v1/users/me",
-      // linkImags: "https://around-api.es.tripleten-services.com/v1/cards/",
-      linkUser: "https://jerjesm.online/users/me",
-      linkImags: "https://jerjesm.online/cards/",
+      linkUser: import.meta.env.VITE_API_USER_URL,
+      linkImags: import.meta.env.VITE_API_CARDS_URL,
     },
     params
   );
@@ -63,19 +60,17 @@ function App() {
     setPopup(null);
   }
 
-  const handleRegistration = ({ password, email }) => {
+  const handleRegistration = ({ name, password, email, about, avatar }) => {
     try {
-      auth.signup(password, email).then(() => {
+      auth.signup(name, password, email, about, avatar).then(() => {
         navigate("/signin");
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
   const handleLogin = ({ email, password }) => {
-    console.log("==== HANDLELOGIN ======");
-    console.log("email: " + email + " password: " + password);
     if (!email || !password) {
       return;
     }
@@ -92,11 +87,11 @@ function App() {
             navigate("/");
           });
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -138,7 +133,6 @@ function App() {
           handleOpenPopup={handleOpenPopup}
           handleClosePopup={handleClosePopup}
         />
-
         <Routes>
           <Route
             path="/"

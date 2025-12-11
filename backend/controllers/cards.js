@@ -28,7 +28,7 @@ export async function getCard(req, res) {
       } else {
         const error = new Error("Error al buscar tarjeta");
         error.statusCode = 400;
-        throw error; // Recuerda arrojar un error para que .catch lo maneje en lugar de .then
+        throw error;
       }
     })
     .then((card) => res.send({ data: card }))
