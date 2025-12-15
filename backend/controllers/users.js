@@ -16,11 +16,11 @@ dotenv.config();
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 export const createUser = async (req, res) => {
-  // console.log("Nuevo usuario");
-  // console.log("body", req.body);
+  console.log("Nuevo usuario");
+  console.log("body", req.body);
   const { name, password, email, about, avatar } = req.body;
 
-  // console.log("name:", name, " password:", password, " email:", email);
+  console.log("name:", name, " password:", password, " email:", email);
   bcrypt
     .hash(password, 10)
     .then((hash) =>
@@ -55,6 +55,7 @@ export async function login(req, res) {
 
   // 1. Buscar usuario por email
   User.findOne({ email })
+    .select("+password")
     .then((user) => {
       console.log("Usuario encontrado:", user); // NUEVO LOG
       if (!user) {

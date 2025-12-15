@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import btnCerrar from "../../../images//BotonCerrar.png";
+import btnCerrar from "../../../images/BotonCerrar.png";
 import { getToken, setToken } from "../../utils/token";
 
 const Signin = ({ handleLogin }) => {

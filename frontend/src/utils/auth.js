@@ -6,7 +6,8 @@ export const BASE_URL =
 // y envía una solicitud POST al endpoint dado.
 export async function signup(name, password, email, about, avatar) {
   try {
-    const res = await fetch(`${BASE_URL}signup`, {
+    // const res = await fetch(`${BASE_URL}signup`, {
+    const res = await fetch(`${VITE_API_BASE_URL}signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -22,7 +23,7 @@ export async function signup(name, password, email, about, avatar) {
 // La función de autorización acepta los datos necesarios como parámetros.
 export async function signin(email, password) {
   try {
-    const res = await fetch(`${BASE_URL}signin`, {
+    const res = await fetch(`${VITE_API_BASE_URL}signin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

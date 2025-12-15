@@ -49,11 +49,6 @@ app.post("/signin", login);
 app.post("/signup", createUser);
 
 // Rutas protegidas (con middleware de autenticación)
-//
-//
-//
-//
-//
 app.use("/users", getTokenInfo, routerUsers);
 app.use("/cards", getTokenInfo, routerCards);
 

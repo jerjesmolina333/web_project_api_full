@@ -1,16 +1,16 @@
 import { useState } from "react";
-import Header from "../components/Header/Header.jsx";
-import Main from "../components/Main/Main.jsx";
-import Footer from "../components/Footer/Footer.jsx";
-import api from "../utils/Api.js";
-import Signin from "../components/Signin/Signin.jsx";
-import Signup from "../components/Signup/Signup.jsx";
+import Header from "../src/components/Header/Header.jsx";
+import Main from "../src/components/Main/Main.jsx";
+import Footer from "../src/components/Footer/Footer.jsx";
+import api from "../src/utils/Api.js";
+import Signin from "../src/components/Signin/Signin.jsx";
+import Signup from "../src/components/Signup/Signup.jsx";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute.jsx";
-import { setToken } from "../utils/token.js";
-import * as auth from "../utils/auth.js";
-import Api from "../utils/Api.js";
-import EditAvatar from "../components/Popups/EditAvatar.jsx";
+import ProtectedRoute from "../src/components/ProtectedRoute/ProtectedRoute.jsx";
+import { setToken } from "./utils/token.js";
+import * as auth from "../src/utils/auth.js";
+import Api from "../src/utils/Api.js";
+import EditAvatar from "../src/components/Popups/EditAvatar.jsx";
 
 function App() {
   const [userData, setUserData] = useState({ email: "" });
@@ -18,7 +18,6 @@ function App() {
   const [popup, setPopup] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("=== App");
 
   const params = {
     headers: {
@@ -54,10 +53,6 @@ function App() {
   }
 
   const handleRegistration = ({ name, password, email, about, avatar }) => {
-    console.log("=== handleRegistration:");
-    console.log("name:", name);
-    console.log("password:", password);
-    console.log("email:", email);
     try {
       auth.signup(name, password, email, about, avatar).then(() => {
         navigate("/signin");
@@ -71,7 +66,7 @@ function App() {
     if (!email || !password) {
       return;
     }
-    console.log("=== handleLogin");
+
     try {
       auth.signin(email, password).then((data) => {
         try {

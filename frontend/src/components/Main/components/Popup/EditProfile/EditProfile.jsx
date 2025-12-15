@@ -7,6 +7,9 @@ import { CurrentUserContext } from "../../../../../contexts/CurrentUserContext";
 export default function EditProfile(props) {
   const userContext = useContext(CurrentUserContext); // Suscribirse a CurrentUserContext
   const currentUser = useContext(CurrentUserContext); // Obtiene el objeto currentUser
+
+  // const { handleUpdateUser } = userContext;
+
   const [name, setName] = useState(currentUser.name); // Agrega la variable de estado para name
   const [description, setDescription] = useState(currentUser.about); // Agrega la variable de estado para description
 

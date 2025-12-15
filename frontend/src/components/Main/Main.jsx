@@ -4,10 +4,10 @@ import EditAvatar from "../Main/components/Popup/EditAvatar/EditAvatar";
 import EditProfile from "./components/Popup/EditProfile/EditProfile";
 import Card from "../Main/components/Card/Card";
 import NewCard from "./components/Popup/NewCard/NewCard";
-import Api from "../../utils/Api";
-import RegisterOK from "../Popups/RegisterOK";
-import BotonOK from "../../../images/BotonOK.png";
-
+import api from "../../utils/Api";
+import addButton from "../../../images/AddButton.png";
+import edAvatar from "../../../images/Icono_ed_avatar.png";
+import edButton from "../../../images/EditButton.png";
 import {
   CurrentUserContext,
   currentUser,

@@ -8,14 +8,19 @@ import { createUser, login } from "./controllers/users.js";
 import getTokenInfo from "./controllers/middleware/auth.js";
 import { requestLogger, errorLogger } from "./controllers/middleware/logger.js";
 import { errors } from "celebrate";
+import "dotenv/config";
 
 // const { PORT = 3000, BASE_PATH } = process.env;
 const { PORT = 3000 } = process.env;
 
-const mongoUrl =
-  process.env.NODE_ENV === "production"
-    ? "mongodb://jerjesm.online:27017/aroundb"
-    : "mongodb://localhost:27017/aroundb";
+// const mongoUrl =
+//   process.env.NODE_ENV === "production"
+//     ? "mongodb://jerjesm.online:27017/aroundb"
+//     : "mongodb://localhost:27017/aroundb";
+
+console.log("======= app.js:");
+console.log("VITE_API_BASE_URL", process.env.VITE_API_BASE_URL);
+console.log("Node version (process.version):", process.version);
 
 mongoose
   // .connect(mongoUrl)
@@ -42,12 +47,6 @@ app.get("/crash-test", () => {
 });
 
 app.use(requestLogger); // habilitar el logger de solicitud
-
-app.get("/crash-test", () => {
-  setTimeout(() => {
-    throw new Error("El servidor va a caer");
-  }, 0);
-});
 
 app.post("/signin", login);
 app.post("/signup", createUser);
