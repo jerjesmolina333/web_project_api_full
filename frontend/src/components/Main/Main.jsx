@@ -6,9 +6,6 @@ import Card from "../Main/components/Card/Card";
 import NewCard from "./components/Popup/NewCard/NewCard";
 import Api from "../../utils/Api";
 import { getToken } from "../../utils/token";
-import addButton from "../../../images/AddButton.png";
-import edAvatar from "../../../images/Icono_ed_avatar.png";
-import edButton from "../../../images/EditButton.png";
 
 import {
   CurrentUserContext,
@@ -27,8 +24,9 @@ export default function Main(props) {
   const currentUser = props.userData || {};
 
   const jwt = getToken();
-  console.log("🔵 Main.jsx - JWT Token:", jwt);
-  console.log("🔵 Main.jsx - userData from props:", props.userData);
+  // console.log("🔵 Main.jsx - JWT Token:", jwt);
+  // console.log("🔵 Main.jsx - userData from props:", props.userData);
+
   const params = {
     headers: {
       Authorization: `Bearer ${jwt}`,
@@ -38,18 +36,22 @@ export default function Main(props) {
 
   const api = new Api(
     {
-      linkUser: "https://jerjesm.online/users/me",
-      linkImags: "https://jerjesm.online/cards/",
+      linkUser: "https://api.jerjesm.online/users/me",
+      linkImags: "https://api.jerjesm.online/cards/",
     },
     params
   );
 
-
-
   useEffect(() => {
     async function getCards() {
-      const cardsList = await api.getImagesList();
-      setCards(cardsList);
+      try {
+        // console.log("🔵 Fetching cards...");
+        const cardsList = await api.getImagesList();
+        // console.log("✅ Cards loaded:", cardsList);
+        setCards(cardsList);
+      } catch (error) {
+        console.error("❌ Error loading cards:", error);
+      }
     }
     getCards();
   }, []);
@@ -68,7 +70,7 @@ export default function Main(props) {
     children: (
       <EditProfile
         handleUpdateUser={props.handleUpdateUser}
-        handleClosePopup={props.onClosePopup}
+        handleClosePopup={props.handleClosePopup}
       />
     ),
   };
@@ -86,7 +88,7 @@ export default function Main(props) {
     title: "Nuevo lugar",
     children: (
       <NewCard
-        handleClosePopup={props.onClosePopup}
+        handleClosePopup={props.handleClosePopup}
         handleAddPlaceSubmit={handleAddPlaceSubmit}
       />
     ),
@@ -97,18 +99,18 @@ export default function Main(props) {
     children: (
       <EditAvatar
         handleUpdateAvatar={props.handleUpdateAvatar}
-        handleClosePopup={props.onClosePopup}
+        handleClosePopup={props.handleClosePopup}
       />
     ),
   };
 
   return (
     <>
-      {console.log(">>>>>>>>Renderizando Main...")}
+      {/* {console.log(">>>>>>>>Renderizando Main...")}
       {console.log("User Data from props:", props.userData)}
       {console.log("User avatar from props:", props.userData?.avatar)}
       {console.log("User name from props:", props.userData?.name)}
-      {console.log("currentUser:", currentUser)}
+      {console.log("currentUser:", currentUser)} */}
 
       <main className="page">
         <div className="profile">
@@ -162,13 +164,13 @@ export default function Main(props) {
               isLiked={card.isLiked}
               onCardDelete={onCardDelete}
               setCards={setCards}
-              onClose={props.onClosePopup}
+              onClose={props.handleClosePopup}
             />
           ))}
         </ul>
 
         {props.popup && (
-          <Popup onClose={props.onClosePopup} title={props.popup.title}>
+          <Popup onClose={props.handleClosePopup} title={props.popup.title}>
             {props.popup.children}
           </Popup>
         )}

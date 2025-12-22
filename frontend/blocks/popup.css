@@ -1,15 +1,16 @@
 .modal-overlay {
-  position: relative;
-  width: 400px;
-  height: 90vh;
+  position: absolute;
+  width: 30vw;
+  height: 70vh;
   margin: auto;
-  top: -10px;
+  top: 10vh;
+  left: 25vw;
   background: black;
-  /* background-color: #30cdf9; */
+  /* background-color: #2b3133; */
   opacity: 0.95;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 5px;
   z-index: 1;
 }
@@ -30,7 +31,6 @@
 }
 
 .popup__form {
-  /* border: 1px aqua solid; */
   background: black;
   color: white;
   display: flex;
@@ -43,10 +43,9 @@
   position: relative;
   width: 23px;
   height: 23px;
-  left: 380px;
-  top: -70px;
+  left: 27vw;
+  top: -4vh;
   z-index: 10;
-  /* border: aqua 1px solid; */
 }
 .popup__heading {
   font-family: Inter;
@@ -59,7 +58,7 @@
   padding-top: 0;
   text-align: center;
   position: relative;
-  top: -70px;
+  top: -30px;
 }
 
 .popup__field {
@@ -72,7 +71,7 @@
   box-sizing: border-box;
   border-bottom: 1px solid #bcbcc4;
   background-color: transparent;
-  width: 350px;
+  width: 25vw;
   height: 8vh;
 }
 .popup__message {
@@ -109,7 +108,7 @@
   position: relative;
   width: 25px;
   height: 25px;
-  left: 490px;
+  left: 30vw;
   top: -290px;
   z-index: 10;
 }
@@ -131,7 +130,7 @@
   font-size: 20px;
   line-height: 1;
   letter-spacing: 0%;
-  width: 300px;
+  width: 20vw;
   height: 50px;
   border: 1px #c4c4c4 solid;
   background-color: black;

@@ -74,7 +74,7 @@ export async function signin(email, password) {
 }
 
 export async function getUserInfo(token) {
-  console.log("🔵 getUserInfo - URL:", `${BASE_URL}users/me`);
+  // console.log("🔵 getUserInfo - URL:", `${BASE_URL}users/me`);
   const res = await fetch(`${BASE_URL}users/me`, {
     method: "GET",
     headers: {

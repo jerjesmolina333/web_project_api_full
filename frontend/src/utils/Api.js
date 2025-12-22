@@ -8,11 +8,10 @@ export class Api {
   }
 
   getInfoUser() {
-    console.log(">>>>Api.getInfoUser: Fetching user info from", this._linkUs);
-    console.log(">>>>Api.getInfoUser: Headers:", this._headers);
+    // console.log(">>>>Api.getInfoUser: Fetching user info from", this._linkUs);
+    // console.log(">>>>Api.getInfoUser: Headers:", this._headers);
     return fetch(this._linkUs, this._headers)
       .then(function (res) {
-        console.log(">>>>Api.getInfoUser: Response status:", res.status);
         return res.json();
       })
       .catch(function (error) {
@@ -21,6 +20,12 @@ export class Api {
   }
 
   getImagesList() {
+    console.log(
+      ">>>>Api.getImagesList: Fetching images list from",
+      this._linkImags
+    );
+    console.log(">>>>Api.getImagesList: Headers:", this._headers);
+
     return fetch(this._linkImags, this._headers)
       .then(function (res) {
         return res.json();

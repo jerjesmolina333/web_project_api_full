@@ -16,7 +16,7 @@ import Signup from "../components/Signup/Signup.jsx";
 import * as auth from "../utils/auth";
 import Api from "../utils/Api.js";
 import { setToken, getToken, removeToken } from "../utils/token.js";
-import Popup from "../components/Popup.jsx";
+// import Popup from "../components/Popup.jsx";
 
 import EditAvatar from "./Popups/EditAvatar.jsx";
 
@@ -82,11 +82,11 @@ function App() {
           auth.validaToken(data.token).then((res) => {
             // Guarda el token en el almacenamiento local:
             setToken(data.token);
-            console.log("token guardado:", data.token);
-            console.log("datos del usuario:", res.data);
-            console.log("data.name: ", res.data.name);
-            console.log("data.email: ", res.data.email);
-            console.log("data.avatar: ", res.data.avatar);
+            // console.log("token guardado:", data.token);
+            // console.log("datos del usuario:", res.data);
+            // console.log("data.name: ", res.data.name);
+            // console.log("data.email: ", res.data.email);
+            // console.log("data.avatar: ", res.data.avatar);
             setUserData(res.data);
             setIsLoggedIn(true);
             navigate("/");
@@ -118,7 +118,7 @@ function App() {
 
   useEffect(() => {
     const jwt = getToken();
-    console.log("INICIO. useEffect");
+    // console.log("INICIO. useEffect");
     if (!jwt) {
       console.log("No hay token");
       setUserData({});
@@ -128,21 +128,21 @@ function App() {
     auth
       .getUserInfo(jwt)
       .then((res) => {
-        console.log(">>>>>Token válido, iniciando sesión del usuario");
-        console.log(">>>>>Datos del usuario completos:", res);
-        console.log(">>>>>Estructura res.data:", res.data);
+        // console.log(">>>>>Token válido, iniciando sesión del usuario");
+        // console.log(">>>>>Datos del usuario completos:", res);
+        // console.log(">>>>>Estructura res.data:", res.data);
 
         // Manejar si los datos vienen en res.data o directamente en res
         const userData = res.data || res;
 
-        console.log(">>>>>Nombre del usuario:", userData.name);
-        console.log(">>>>>Email del usuario:", userData.email);
-        console.log(">>>>>Avatar del usuario:", userData.avatar);
+        // console.log(">>>>>Nombre del usuario:", userData.name);
+        // console.log(">>>>>Email del usuario:", userData.email);
+        // console.log(">>>>>Avatar del usuario:", userData.avatar);
 
         setUserData(userData);
         setIsLoggedIn(true);
         setIsCheckingAuth(false);
-        console.log(">>>>>>Usuario autenticado");
+        // console.log(">>>>>>Usuario autenticado");
       })
       .catch((err) => {
         console.error("Error al validar token:", err);
@@ -160,8 +160,6 @@ function App() {
           <Header
             isLoggedIn={isLoggedIn}
             userData={userData}
-            handleOpenPopup={handleOpenPopup}
-            handleClosePopup={handleClosePopup}
             handleLogout={handleLogout}
           />
           <Routes>

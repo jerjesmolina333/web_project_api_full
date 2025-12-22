@@ -6,7 +6,10 @@ export default function Popup(props) {
   const { onClose, title, children } = props;
 
   function cierraVentanaBoton() {
-    props.onClose();
+    console.log("Cerrando ventana emergente");
+    if (onClose) {
+      onClose();
+    }
   }
 
   return (
