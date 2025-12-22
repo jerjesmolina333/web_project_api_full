@@ -69,6 +69,7 @@ export default function Main(props) {
     title: "Editar perfil",
     children: (
       <EditProfile
+        currentUser={props.userData}
         handleUpdateUser={props.handleUpdateUser}
         handleClosePopup={props.handleClosePopup}
       />
@@ -98,6 +99,7 @@ export default function Main(props) {
     title: "Editar avatar",
     children: (
       <EditAvatar
+        currentUser={props.userData}
         handleClosePopup={props.handleClosePopup}
         handleUpdateAvatar={props.handleUpdateAvatar}
       />

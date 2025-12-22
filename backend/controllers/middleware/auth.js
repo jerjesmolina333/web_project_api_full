@@ -11,7 +11,7 @@ function getTokenInfo(req, res, next) {
   console.log("Middleware auth.js -> authorization:", authorization);
   if (!authorization || !authorization.startsWith("Bearer ")) {
     console.log("ERROR: Autorización requerida");
-    // throw new UnauthorizedError("Autorización requerida");
+    return next(new UnauthorizedError("Autorización requerida"));
   }
   // Extraer el token (quitar "Bearer ")
   console.log("Se va a extraer Bearer del token");
@@ -27,7 +27,7 @@ function getTokenInfo(req, res, next) {
     next(); // Continuar al siguiente middleware
   } catch (err) {
     console.log("ERROR: Token inválido");
-    // throw new UnauthorizedError("Token inválido");
+    return next(new UnauthorizedError("Token inválido"));
   }
 }
 

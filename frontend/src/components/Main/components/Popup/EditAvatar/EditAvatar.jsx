@@ -1,11 +1,12 @@
 import React from "react";
-import { useState, useContext, useRef } from "react";
-import { CurrentUserContext } from "../../../../../contexts/CurrentUserContext";
+import { useState, useRef } from "react";
 
 export default function EditAvatar(props) {
-  // suscribirse a CurrentUserContext
-  const currentUser = useContext(CurrentUserContext);
-  const [avatar, setAvatar] = useState(currentUser.avatar);
+  console.log("🔵 EditAvatar.jsx - props:", props);
+  console.log("🔵 EditAvatar.jsx - currentUser:", props.currentUser);
+
+  const currentUser = props.currentUser || {};
+  const [avatar, setAvatar] = useState(currentUser.avatar || "");
   const avatarRef = React.useRef(avatar);
 
   const handleAvatarChange = (evt) => {
@@ -13,7 +14,7 @@ export default function EditAvatar(props) {
   };
 
   const handleSubmit = (evt) => {
-    evt.preventDefault(); // Evita el comportamiento predeterminado del envío de formularios
+    evt.preventDefault();
     props.handleUpdateAvatar({
       // Actualiza la información del usuario
       avatar: avatarRef.current.value,
@@ -23,6 +24,7 @@ export default function EditAvatar(props) {
 
   return (
     <form
+      className="popup__form"
       name="EA-form"
       id="editar-avatar"
       method="post"

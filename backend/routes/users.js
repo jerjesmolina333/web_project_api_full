@@ -16,7 +16,9 @@ import {
   createUser,
   login,
   getUsers,
+  getUser,
   getCurrentUser,
+  updateUser,
   updateAvatar,
 } from "../controllers/users.js";
 const routerUsers = express.Router();
@@ -27,12 +29,8 @@ routerUsers.post("/signup", validateBody(registerSchema), createUser);
 routerUsers.get("/", getUsers);
 routerUsers.get("/me", getCurrentUser);
 
-// routerUsers.get("/:id", getUser);
-// routerUsers.patch("/me", validateBody(updateUserSchema), updateUser);
-routerUsers.patch(
-  "/users/me/avatar",
-  validateBody(updateAvatarSchema),
-  updateAvatar
-);
+routerUsers.get("/:id", getUser);
+routerUsers.patch("/me", validateBody(updateUserSchema), updateUser);
+routerUsers.patch("/me/avatar", validateBody(updateAvatarSchema), updateAvatar);
 
 export default routerUsers;

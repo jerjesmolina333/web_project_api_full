@@ -1,29 +1,28 @@
 import React from "react";
-
-import { useState, useContext } from "react";
-import api from "../../../../../utils/Api";
-import { CurrentUserContext } from "../../../../../contexts/CurrentUserContext";
+import { useState } from "react";
 
 export default function EditProfile(props) {
-  const userContext = useContext(CurrentUserContext); // Suscribirse a CurrentUserContext
-  const currentUser = useContext(CurrentUserContext); // Obtiene el objeto currentUser
+  // console.log("🔵 EditProfile.jsx - props:", props);
+  // console.log("🔵 EditProfile.jsx - currentUser:", props.currentUser);
 
-  // const { handleUpdateUser } = userContext;
+  const currentUser = props.currentUser || {};
 
-  const [name, setName] = useState(currentUser.name); // Agrega la variable de estado para name
-  const [description, setDescription] = useState(currentUser.about); // Agrega la variable de estado para description
+  const [name, setName] = useState(currentUser.name || "");
+  const [about, setAbout] = useState(currentUser.about || "");
 
   const handleNameChange = (evt) => {
     setName(evt.target.value); // Actualiza name cuando cambie la entrada
   };
 
-  const handleDescriptionChange = (evt) => {
-    setDescription(evt.target.value);
+  const handleAboutChange = (evt) => {
+    setAbout(evt.target.value);
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault(); // Evita el comportamiento predeterminado del envío de formularios
-    props.handleUpdateUser({ name, about: description }); // Actualiza la información del usuario // Actualiza la información del usuario
+    console.log("🔵 EditProfile.jsx - handleSubmit - name:", name);
+    console.log("🔵 EditProfile.jsx - handleSubmit - about:", about);
+    event.preventDefault();
+    props.handleUpdateUser({ name, about }); // Actualiza la información del usuario
     props.handleClosePopup();
   };
 
@@ -53,9 +52,9 @@ export default function EditProfile(props) {
         <input
           className="popup__input"
           type="text"
-          id="acerca"
+          id="about"
           placeholder={currentUser?.about}
-          onChange={handleDescriptionChange}
+          onChange={handleAboutChange}
           minLength="2"
           maxLength="200"
           required

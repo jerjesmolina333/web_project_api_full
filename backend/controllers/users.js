@@ -98,7 +98,9 @@ export async function getCurrentUser(req, res, next) {
   try {
     console.log("GetCurrentUser. req.user:", req.user);
     console.log("req.user._id:", req.user._id);
-    const user = await User.findById(req.user._id).select('+password -password');
+    const user = await User.findById(req.user._id).select(
+      "+password -password"
+    );
     if (!user) {
       console.log("Usuario no encontrado");
       throw new NotFoundError("Usuario no encontrado");
@@ -110,29 +112,59 @@ export async function getCurrentUser(req, res, next) {
   }
 }
 
-export async function updateAvatar(req, res) {
-  const id = req.params.me;
-  console.log("elId: " + id);
-  const avatar = req.params.avatar;
-  user
-    .patch({ _id: id, avatar, next })
-    .orFail(() => {
-      if (err == DocumentNotFoundError) {
-        const error = new Error(
-          "No se ha encontrado ningun usuario con esa id"
-        );
-        error.statusCode = 404;
-        throw error;
-        throw new NotFoundError(
-          "No se ha encontrado ningun usuario con esa id"
-        );
-      } else {
-        const error = new Error("Error al actualizar avatar de usuario");
-        error.statusCode = 400;
-        throw error;
-        throw new BadRequestError("Error al actualizar avatar de usuario");
-      }
-    })
-    .then((user) => res.send({ data: user }))
-    .catch(next);
+export async function getUser(req, res, next) {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) {
+      throw new NotFoundError("Usuario no encontrado");
+    }
+    res.send(user);
+  } catch (err) {
+    console.log("ERROR al obtener usuario:", err.message);
+    next(err);
+  }
+}
+
+export async function updateUser(req, res, next) {
+  console.log(">>>>>>UpdateUser. req.user:", req.user);
+  console.log("req.body:", req.body);
+  console.log("req.user._id:", req.user._id);
+  console.log("req.body.name:", req.body.name);
+  console.log("req.body.about:", req.body.about);
+  try {
+    const { name, about } = req.body;
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { name, about },
+      { new: true, runValidators: true }
+    );
+    if (!user) {
+      throw new NotFoundError("Usuario no encontrado");
+    }
+    res.send(user);
+  } catch (err) {
+    console.log("ERROR al actualizar usuario:", err.message);
+    next(err);
+  }
+}
+
+export async function updateAvatar(req, res, next) {
+  try {
+    console.log("UpdateAvatar. req.user:", req.user);
+    console.log("req.body:", req.body);
+    const { avatar } = req.body;
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { avatar },
+      { new: true, runValidators: true }
+    );
+    if (!user) {
+      throw new NotFoundError("Usuario no encontrado");
+    }
+    res.send(user);
+  } catch (err) {
+    console.log("ERROR al actualizar avatar:", err.message);
+    next(err);
+  }
 }

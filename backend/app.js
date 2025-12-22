@@ -67,14 +67,14 @@ app.use("/cards", getTokenInfo, routerCards);
 app.use(errors()); // controlador de errores de celebrate
 
 // aquí manejamos todos los errores
-// app.use((err, req, res, next) => {
-//   console.log(err);
-//   const { statusCode = 500, message } = err;
-//   res.status(statusCode).send({
-//     message:
-//       statusCode === 500 ? "Se ha producido un error en el servidor" : message,
-//   });
-// });
+app.use((err, req, res, next) => {
+  console.log(err);
+  const { statusCode = 500, message } = err;
+  res.status(statusCode).send({
+    message:
+      statusCode === 500 ? "Se ha producido un error en el servidor" : message,
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Ya está el servidor listo en el puerto ${PORT}`);

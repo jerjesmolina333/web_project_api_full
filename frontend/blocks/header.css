@@ -16,7 +16,9 @@
   /* border: 1px red solid; */
 }
 .header__info {
-  width: 300px;
+  width: 250px;
+  margin-top: 40px;
+  margin-right: 70px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

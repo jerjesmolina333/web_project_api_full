@@ -28,31 +28,50 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const params = {
-    headers: {
-      authorization: import.meta.env.VITE_AUTH_TOKEN,
-    },
-  };
-
-  const api = new Api(
-    {
-      linkUser: import.meta.env.VITE_API_USER_URL,
-      linkImags: import.meta.env.VITE_API_CARDS_URL,
-    },
-    params
-  );
-
   const handleUpdateUser = (data) => {
+    const jwt = getToken();
+    const params = {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    const api = new Api(
+      {
+        linkUser: import.meta.env.VITE_API_USER_URL,
+        linkImags: import.meta.env.VITE_API_CARDS_URL,
+      },
+      params
+    );
+
     (async () => {
       await api._actualizaUsuario(data).then((newData) => {
-        setCurrentUser(newData);
+        setUserData(newData);
       });
     })();
   };
+
   const handleUpdateAvatar = (data) => {
+    const jwt = getToken();
+    const params = {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    const api = new Api(
+      {
+        linkUser: import.meta.env.VITE_API_USER_URL,
+        linkImags: import.meta.env.VITE_API_CARDS_URL,
+      },
+      params
+    );
+
     (async () => {
       await api._actualizaAvatar(data).then((newData) => {
-        setCurrentUser(newData);
+        setUserData(newData);
       });
     })();
   };

@@ -20,12 +20,6 @@ export class Api {
   }
 
   getImagesList() {
-    console.log(
-      ">>>>Api.getImagesList: Fetching images list from",
-      this._linkImags
-    );
-    console.log(">>>>Api.getImagesList: Headers:", this._headers);
-
     return fetch(this._linkImags, this._headers)
       .then(function (res) {
         return res.json();
@@ -82,10 +76,20 @@ export class Api {
 
   _actualizaUsuario(data) {
     const tempURL = `${this._linkUs}`;
+    console.log(">>>>Api.actualizaUsuario: Updating user info at", tempURL);
+    console.log(">>>>Api.actualizaUsuario: Data:", data);
+    console.log(">>>>Api.actualizaUsuario: this._headers:", this._headers);
+    console.log(">>>>Api.actualizaUsuario: tempURL:", tempURL);
+    console.log(
+      ">>>>Api.actualizaUsuario: this._headers.headers:",
+      this._headers.headers
+    );
+
     const jsonParam = JSON.stringify({
       name: data.name,
       about: data.about,
     });
+
     const objParams = {
       method: "PATCH",
       headers: {
@@ -94,11 +98,30 @@ export class Api {
       },
       body: jsonParam,
     };
+
+    console.log(">>>>Api.actualizaUsuario: objParams:", objParams);
+    console.log(
+      ">>>>Api.actualizaUsuario: objParams.headers:",
+      objParams.headers
+    );
+
     return fetch(tempURL, objParams)
       .then(function (res) {
+        console.log(">>>>Api.actualizaUsuario: Response status:", res.status);
+        if (!res.ok) {
+          return res.text().then((text) => {
+            console.error(">>>>Api.actualizaUsuario: Error response:", text);
+            throw new Error(`HTTP ${res.status}: ${text}`);
+          });
+        }
         return res.json();
       })
+      .then(function (result) {
+        console.log(">>>>Api.actualizaUsuario: Response data:", result);
+        return result;
+      })
       .catch(function (error) {
+        console.error(">>>>Api.actualizaUsuario: Error:", error);
         return Promise.reject(`Error: ${error}`);
       });
   }
@@ -128,9 +151,13 @@ export class Api {
 
   _actualizaAvatar(data) {
     const tempURL = `${this._linkUs}/avatar`;
+    console.log(">>>>Api.actualizaAvatar: URL:", tempURL);
+    console.log(">>>>Api.actualizaAvatar: Headers:", this._headers.headers);
+
     const jsonParam = JSON.stringify({
       avatar: data.avatar,
     });
+
     const objParams = {
       method: "PATCH",
       headers: {
@@ -139,11 +166,24 @@ export class Api {
       },
       body: jsonParam,
     };
+
     return fetch(tempURL, objParams)
       .then(function (res) {
+        console.log(">>>>Api.actualizaAvatar: Response status:", res.status);
+        if (!res.ok) {
+          return res.text().then((text) => {
+            console.error(">>>>Api.actualizaAvatar: Error response:", text);
+            throw new Error(`HTTP ${res.status}: ${text}`);
+          });
+        }
         return res.json();
       })
+      .then(function (result) {
+        console.log(">>>>Api.actualizaAvatar: Response data:", result);
+        return result;
+      })
       .catch(function (error) {
+        console.error(">>>>Api.actualizaAvatar: Error:", error);
         return Promise.reject(`Error: ${error}`);
       });
   }

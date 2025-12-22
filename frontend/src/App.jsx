@@ -2,7 +2,6 @@ import { useState } from "react";
 import Header from "../src/components/Header/Header.jsx";
 import Main from "../src/components/Main/Main.jsx";
 import Footer from "../src/components/Footer/Footer.jsx";
-import api from "../src/utils/Api.js";
 import Signin from "../src/components/Signin/Signin.jsx";
 import Signup from "../src/components/Signup/Signup.jsx";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
@@ -34,6 +33,7 @@ function App() {
   );
 
   const handleUpdateUser = (data) => {
+    console.log("🔵 App.jsx - handleUpdateUser - data:", data);
     (async () => {
       await api._actualizaUsuario(data).then((newData) => {
         setCurrentUser(newData);
