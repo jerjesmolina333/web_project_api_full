@@ -98,8 +98,8 @@ export default function Main(props) {
     title: "Editar avatar",
     children: (
       <EditAvatar
-        handleUpdateAvatar={props.handleUpdateAvatar}
         handleClosePopup={props.handleClosePopup}
+        handleUpdateAvatar={props.handleUpdateAvatar}
       />
     ),
   };
