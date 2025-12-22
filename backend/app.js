@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose"; // viene del video
+import dotenv from "dotenv";
 import routerCards from "./routes/cards.js";
 import routerUsers from "./routes/users.js";
 import { createUser, login } from "./controllers/users.js";
@@ -8,15 +9,13 @@ import getTokenInfo from "./controllers/middleware/auth.js";
 import { requestLogger, errorLogger } from "./controllers/middleware/logger.js";
 import { errors } from "celebrate";
 
+dotenv.config();
+
 // const { PORT = 3000, BASE_PATH } = process.env;
 const { PORT = 3000, MONGO_URI } = process.env;
 
 mongoose
-  // .connect("mongodb://localhost:27017/aroundb")
-  .connect(MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(MONGO_URI)
   .then(function () {
     console.log("Conectado a la base de datos");
   })
@@ -27,8 +26,21 @@ mongoose
 // crear la aplicación usando el método express:
 const app = express();
 
-app.use(cors());
-app.options("/", cors()); //habilitar las solicitudes de todas las rutas
+// Configurcd ..ar CORS explícitamente
+const corsOptions = {
+  origin: [
+    "https://jerjesm.online",
+    "https://www.jerjesm.online",
+    "http://localhost:5173",
+    "http://localhost:3000",
+  ],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

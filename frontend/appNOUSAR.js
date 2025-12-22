@@ -35,10 +35,31 @@ mongoose
 // crear la aplicación usando el método express:
 const app = express();
 
-app.use(cors());
-app.options("/", cors()); //habilitar las solicitudes de todas las rutas
+// Configurar CORS explícitamente
+const corsOptions = {
+  origin: [
+    "https://jerjesm.online",
+    "https://www.jerjesm.online",
+    "http://localhost:5173",
+    "http://localhost:3000",
+  ],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // Habilitar pre-flight para todas las rutas
 
 app.use(express.json());
+
+// Logging middleware para debugging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  console.log("Origin:", req.headers.origin);
+  next();
+});
 
 app.get("/crash-test", () => {
   setTimeout(() => {

@@ -16,11 +16,8 @@ dotenv.config();
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 export const createUser = async (req, res) => {
-  console.log("Nuevo usuario");
-  console.log("body", req.body);
   const { name, password, email, about, avatar } = req.body;
 
-  console.log("name:", name, " password:", password, " email:", email);
   bcrypt
     .hash(password, 10)
     .then((hash) =>
@@ -45,13 +42,8 @@ export const createUser = async (req, res) => {
 };
 
 export async function login(req, res) {
-  console.log("Backend -> login ===");
-  console.log("req.body completo:", req.body);
-  console.log("typeof req.body:", typeof req.body);
   const { email, password } = req.body;
-  console.log("email extraído:", email, "tipo:", typeof email);
-  console.log("password extraído:", password, "tipo:", typeof password);
-  console.log("Backend -> email: ", email, " password: ", password);
+  console.log("===== PROCESO LOGIN -> email: ", email, " password: ", password);
 
   // 1. Buscar usuario por email
   User.findOne({ email })
@@ -65,10 +57,6 @@ export async function login(req, res) {
           .send({ message: "Email o contraseña incorrectos" });
       }
 
-      console.log("user.password:", user.password); // NUEVO LOG
-      console.log("password a comparar:", password); // NUEVO LOG
-
-      // 2. Comparar contraseña
       return bcrypt.compare(password, user.password).then((isMatch) => {
         if (!isMatch) {
           console.log("Contraseña incorrecta");
@@ -78,7 +66,7 @@ export async function login(req, res) {
         }
 
         // 3. Crear JWT
-        console.log("Credenciales correctas, creando token");
+        console.log("CREDENCIALES CORRECTAS!!, creando token");
         const token = jwt.sign(
           { _id: user._id },
           NODE_ENV === "production" ? JWT_SECRET : "frase-secreta",
@@ -106,54 +94,19 @@ export async function getUsers(req, res) {
   }
 }
 
-export async function getUserByMail(req, res) {
-  console.log("= GetUserByMail ==");
-  const email = req.email;
-  // console.log("getUserBYId. _id:", _id);
-  User.findOne({ email: email })
-    .orFail(() => {
-      if (err == DocumentNotFoundError) {
-        const error = new Error(
-          "No se ha encontrado ningun usuario con ese email"
-        );
-        error.statusCode = 404;
-        throw error;
-        throw new NotFoundError("No se encontró un usuario con ese email");
-      } else {
-        const error = new Error("Error al buscar usuario");
-        error.statusCode = 400;
-        throw error;
-        throw new NotFoundError("Error al buscar usuario");
-      }
-    })
-    .then((user) => res.send({ data: user }))
-    // .catch(() => res.send({ message: "Error: usuario no encontrado" }));
-    .catch(next);
-}
-
-export async function updateUser(req, res, next) {
-  const id = req.params.me;
-  console.log("elId: " + id);
-  const { name, about, avatar } = req.body;
-  user
-    .patch({ _id: id, name, about, avatar })
-    .orFail(() => {
-      if (err == DocumentNotFoundError) {
-        const error = new Error(
-          "No se ha encontrado ningun usuario con esa id"
-        );
-        error.statusCode = 404;
-        throw error;
-        throw new NotFoundError("No se encontró un usuario con ese email");
-      } else {
-        const error = new Error("Error al actualizar usuario");
-        error.statusCode = 400;
-        throw error;
-        throw new BadRequestError("Error al actualizar usuario");
-      }
-    })
-    .then((user) => res.send({ data: user }))
-    .catch(next);
+export async function getCurrentUser(req, res, next) {
+  try {
+    console.log("GetCurrentUser. req.user:", req.user);
+    console.log("req.user._id:", req.user._id);
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      throw new NotFoundError("Usuario no encontrado");
+    }
+    res.send({ data: user });
+  } catch (err) {
+    console.log("ERROR al obtener usuario actual:", err.message);
+    next(err);
+  }
 }
 
 export async function updateAvatar(req, res) {

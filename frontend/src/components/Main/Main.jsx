@@ -26,8 +26,8 @@ export default function Main(props) {
 
   const api = new Api(
     {
-      linkUser: "https://around-api.es.tripleten-services.com/v1/users/me",
-      linkImags: "https://around-api.es.tripleten-services.com/v1/cards/",
+      linkUser: "https://jerjesm.online/users/me",
+      linkImags: "https://jerjesm.online/cards/",
     },
     params
   );
@@ -98,6 +98,7 @@ export default function Main(props) {
 
   return (
     <>
+      {console.log(">>>>>>>>Renderizando Main...")}
       <main className="page">
         <div className="profile">
           <div className="profile__container-imgs">

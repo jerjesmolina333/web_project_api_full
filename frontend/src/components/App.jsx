@@ -1,24 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+
 import Header from "../components/Header/Header.jsx";
 import Main from "../components/Main/Main.jsx";
 import Footer from "../components/Footer/Footer.jsx";
-import api from "../utils/Api.js";
+import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute.jsx";
 import Signin from "../components/Signin/Signin.jsx";
 import Signup from "../components/Signup/Signup.jsx";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute.jsx";
-import { setToken } from "../utils/token.js";
-import * as auth from "../utils/auth.js";
+import * as auth from "../utils/auth";
 import Api from "../utils/Api.js";
-import EditAvatar from "../components/Popups/EditAvatar.jsx";
+import { setToken, getToken } from "../utils/token.js";
+import Popup from "../components/Popup.jsx";
+
+import EditAvatar from "./Popups/EditAvatar.jsx";
 
 function App() {
-  const [userData, setUserData] = useState({ email: "" });
+  const [userData, setUserData] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [popup, setPopup] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("=== App");
 
   const params = {
     headers: {
@@ -54,10 +61,6 @@ function App() {
   }
 
   const handleRegistration = ({ name, password, email, about, avatar }) => {
-    console.log("=== handleRegistration:");
-    console.log("name:", name);
-    console.log("password:", password);
-    console.log("email:", email);
     try {
       auth.signup(name, password, email, about, avatar).then(() => {
         navigate("/signin");
@@ -71,7 +74,7 @@ function App() {
     if (!email || !password) {
       return;
     }
-    console.log("=== handleLogin");
+
     try {
       auth.signin(email, password).then((data) => {
         try {
@@ -101,25 +104,36 @@ function App() {
     setPopup(popup);
   }
 
-  // useEffect(() => {
-  //   const jwt = getToken();
-  //   console.log("INICIO. useEffect");
-  //   if (!jwt) {
-  //     navigate("/signup");
-  //     return;
-  //   }
-
-  //   auth
-  //     .getUserInfo(jwt)
-  //     .then((res) => {
-  //       // si la respuesta es exitosa, inicia la sesión del usuario, guarda sus
-  //       // datos en el estado y lo dirige a /.
-  //       setIsLoggedIn(true);
-  //       setUserData(res.data.email);
-  //       navigate("/");
-  //     })
-  //     .catch(console.error);
-  // }, [navigate, isLoggedIn]);
+  useEffect(() => {
+    const jwt = getToken();
+    console.log("INICIO. useEffect");
+    if (!jwt) {
+      console.log("No hay token, redirigiendo a /signup");
+      navigate("/signup");
+      return;
+    }
+    auth
+      .getUserInfo(jwt)
+      .then((res) => {
+        // si la respuesta es exitosa, inicia la sesión del usuario, guarda sus
+        // datos en el estado y lo dirige a /.
+        // console.log(">>>>>Token válido, iniciando sesión del usuario");
+        setIsLoggedIn(true);
+        setUserData(res.data.email);
+        console.log(">>>>>>Usuario autenticado");
+        console.log("location.pathname:", location.pathname);
+        // Solo navegar a / si no estamos ya ahí
+        if (location.pathname !== "/") {
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsLoggedIn(false);
+        navigate("/signup");
+      });
+    // }, [navigate, location.pathname]);
+  }, []);
 
   return (
     <>
@@ -145,14 +159,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/signin"
             element={<Signin handleLogin={handleLogin} />}
           />
           <Route
             path="/signup"
             element={<Signup handleRegistration={handleRegistration} />}
-          />
+          /> */}
         </Routes>
         <Footer />
       </div>

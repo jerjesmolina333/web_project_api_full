@@ -14,10 +14,9 @@ import {
 
 import {
   createUser,
-  getUsers,
-  getUserByMail,
   login,
-  updateUser,
+  getUsers,
+  getCurrentUser,
   updateAvatar,
 } from "../controllers/users.js";
 const routerUsers = express.Router();
@@ -26,10 +25,10 @@ routerUsers.post("/signin", validateBody(loginSchema), login);
 routerUsers.post("/signup", validateBody(registerSchema), createUser);
 
 routerUsers.get("/", getUsers);
+routerUsers.get("/me", getCurrentUser);
 
 // routerUsers.get("/:id", getUser);
-routerUsers.patch("/me", validateBody(updateUserSchema), updateUser);
-routerUsers.get("/:email", getUserByMail);
+// routerUsers.patch("/me", validateBody(updateUserSchema), updateUser);
 routerUsers.patch(
   "/users/me/avatar",
   validateBody(updateAvatarSchema),
