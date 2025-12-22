@@ -44,19 +44,7 @@ export default function Main(props) {
     params
   );
 
-  // useEffect(() => {
-  //   async function updateUser() {
-  //     try {
-  //       console.log("^^^^Fetching user info...");
-  //       const updatedUser = await api.getInfoUser();
-  //       console.log("^^^^User info fetched:", updatedUser);
-  //       setCurrentUser(updatedUser);
-  //     } catch (error) {
-  //       console.error("❌ Error fetching user info:", error);
-  //     }
-  //   }
-  //   updateUser();
-  // }, []);
+
 
   useEffect(() => {
     async function getCards() {
@@ -120,14 +108,13 @@ export default function Main(props) {
       {console.log("User Data from props:", props.userData)}
       {console.log("User avatar from props:", props.userData?.avatar)}
       {console.log("User name from props:", props.userData?.name)}
-      {/* {console.log("Current User:", currentUser)}
-      {console.log("Current user avatar:", currentUser?.avatar)}
-      {console.log("currentUser name:", currentUser?.name)} */}
+      {console.log("currentUser:", currentUser)}
+
       <main className="page">
         <div className="profile">
           <div className="profile__container-imgs">
             <img
-              src={currentUser?.avatar}
+              src={props.userData?.avatar}
               className="profile__photo"
               alt="User photo"
             />
@@ -140,7 +127,7 @@ export default function Main(props) {
 
           <div className="profile__name-container">
             <div className="contNombre">
-              <p className="profile__name">{currentUser?.name}</p>
+              <p className="profile__name">{props.userData?.name}</p>
               <button
                 className="profile__boton-edit"
                 aria-label="Editar perfil"
@@ -153,7 +140,7 @@ export default function Main(props) {
                 />
               </button>
             </div>
-            <p className="profile__profession">{currentUser?.about}</p>
+            <p className="profile__profession">{props.userData?.about}</p>
           </div>
 
           <button className="profile__boton-plus" aria-label="Agrega imagen">

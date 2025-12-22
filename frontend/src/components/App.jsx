@@ -129,17 +129,20 @@ function App() {
       .getUserInfo(jwt)
       .then((res) => {
         console.log(">>>>>Token válido, iniciando sesión del usuario");
-        console.log(">>>>>Datos del usuario:", res);
-        console.log(">>>>>Nombre del usuario:", res.name);
-        console.log(">>>>>Email del usuario:", res.email);
-        console.log(">>>>>Avatar del usuario:", res.avatar);
-        setUserData(res);
-        setIsLoggedIn(true);
+        console.log(">>>>>Datos del usuario completos:", res);
+        console.log(">>>>>Estructura res.data:", res.data);
 
+        // Manejar si los datos vienen en res.data o directamente en res
+        const userData = res.data || res;
+
+        console.log(">>>>>Nombre del usuario:", userData.name);
+        console.log(">>>>>Email del usuario:", userData.email);
+        console.log(">>>>>Avatar del usuario:", userData.avatar);
+
+        setUserData(userData);
+        setIsLoggedIn(true);
         setIsCheckingAuth(false);
         console.log(">>>>>>Usuario autenticado");
-        const tok = getToken();
-        console.log("token recuperado:", tok);
       })
       .catch((err) => {
         console.error("Error al validar token:", err);
