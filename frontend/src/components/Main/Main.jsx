@@ -4,23 +4,35 @@ import EditAvatar from "../Main/components/Popup/EditAvatar/EditAvatar";
 import EditProfile from "./components/Popup/EditProfile/EditProfile";
 import Card from "../Main/components/Card/Card";
 import NewCard from "./components/Popup/NewCard/NewCard";
-import api from "../../utils/Api";
+import Api from "../../utils/Api";
+import { getToken } from "../../utils/token";
 import addButton from "../../../images/AddButton.png";
 import edAvatar from "../../../images/Icono_ed_avatar.png";
 import edButton from "../../../images/EditButton.png";
+
 import {
   CurrentUserContext,
   currentUser,
 } from "../../../src/contexts/CurrentUserContext";
 
+import imgEdAvatar from "../../../images/Icono_ed_avatar.png";
+import imgAddButton from "../../../images/AddButton.png";
+import imgEdButton from "../../../images/EditButton.png";
+
 export default function Main(props) {
   const [popup, setPopup] = useState(null);
-  const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
+  // Usar los datos del usuario que vienen de App.jsx
+  const currentUser = props.userData || {};
+
+  const jwt = getToken();
+  console.log("🔵 Main.jsx - JWT Token:", jwt);
+  console.log("🔵 Main.jsx - userData from props:", props.userData);
   const params = {
     headers: {
-      authorization: "082ad1cf-6751-4277-bd54-4a8ddfdec0e7",
+      Authorization: `Bearer ${jwt}`,
+      "Content-Type": "application/json",
     },
   };
 
@@ -32,13 +44,19 @@ export default function Main(props) {
     params
   );
 
-  useEffect(() => {
-    async function updateUser() {
-      const updatedUser = await api.getInfoUser();
-      setCurrentUser(updatedUser);
-    }
-    updateUser();
-  }, []);
+  // useEffect(() => {
+  //   async function updateUser() {
+  //     try {
+  //       console.log("^^^^Fetching user info...");
+  //       const updatedUser = await api.getInfoUser();
+  //       console.log("^^^^User info fetched:", updatedUser);
+  //       setCurrentUser(updatedUser);
+  //     } catch (error) {
+  //       console.error("❌ Error fetching user info:", error);
+  //     }
+  //   }
+  //   updateUser();
+  // }, []);
 
   useEffect(() => {
     async function getCards() {
@@ -99,6 +117,12 @@ export default function Main(props) {
   return (
     <>
       {console.log(">>>>>>>>Renderizando Main...")}
+      {console.log("User Data from props:", props.userData)}
+      {console.log("User avatar from props:", props.userData?.avatar)}
+      {console.log("User name from props:", props.userData?.name)}
+      {/* {console.log("Current User:", currentUser)}
+      {console.log("Current user avatar:", currentUser?.avatar)}
+      {console.log("currentUser name:", currentUser?.name)} */}
       <main className="page">
         <div className="profile">
           <div className="profile__container-imgs">
@@ -108,7 +132,7 @@ export default function Main(props) {
               alt="User photo"
             />
             <img
-              src="../images/Icono_ed_avatar.png"
+              src={imgEdAvatar}
               className="profile__img-edit-avatar"
               onClick={() => props.handleOpenPopup(editAvatarPopup)}
             />
@@ -122,7 +146,7 @@ export default function Main(props) {
                 aria-label="Editar perfil"
               >
                 <img
-                  src="../images/EditButton.png"
+                  src={imgEdButton}
                   className="profile__edit-image"
                   alt="Edit Button"
                   onClick={() => props.handleOpenPopup(editProfilePopup)}
@@ -134,7 +158,7 @@ export default function Main(props) {
 
           <button className="profile__boton-plus" aria-label="Agrega imagen">
             <img
-              src="../images/AddButton.png"
+              src={imgAddButton}
               className="profile__plus"
               alt="Add button"
               onClick={() => props.handleOpenPopup(newCardPopup)}

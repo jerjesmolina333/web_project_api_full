@@ -15,7 +15,7 @@ import Signin from "../components/Signin/Signin.jsx";
 import Signup from "../components/Signup/Signup.jsx";
 import * as auth from "../utils/auth";
 import Api from "../utils/Api.js";
-import { setToken, getToken } from "../utils/token.js";
+import { setToken, getToken, removeToken } from "../utils/token.js";
 import Popup from "../components/Popup.jsx";
 
 import EditAvatar from "./Popups/EditAvatar.jsx";
@@ -23,6 +23,7 @@ import EditAvatar from "./Popups/EditAvatar.jsx";
 function App() {
   const [userData, setUserData] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [popup, setPopup] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -81,8 +82,12 @@ function App() {
           auth.validaToken(data.token).then((res) => {
             // Guarda el token en el almacenamiento local:
             setToken(data.token);
-
-            setUserData(res.data.email);
+            console.log("token guardado:", data.token);
+            console.log("datos del usuario:", res.data);
+            console.log("data.name: ", res.data.name);
+            console.log("data.email: ", res.data.email);
+            console.log("data.avatar: ", res.data.avatar);
+            setUserData(res.data);
             setIsLoggedIn(true);
             navigate("/");
           });
@@ -104,72 +109,99 @@ function App() {
     setPopup(popup);
   }
 
+  function handleLogout() {
+    removeToken();
+    setIsLoggedIn(false);
+    setUserData("");
+    navigate("/signin");
+  }
+
   useEffect(() => {
     const jwt = getToken();
     console.log("INICIO. useEffect");
     if (!jwt) {
-      console.log("No hay token, redirigiendo a /signup");
-      navigate("/signup");
+      console.log("No hay token");
+      setUserData({});
+      setIsCheckingAuth(false);
       return;
     }
     auth
       .getUserInfo(jwt)
       .then((res) => {
-        // si la respuesta es exitosa, inicia la sesión del usuario, guarda sus
-        // datos en el estado y lo dirige a /.
-        // console.log(">>>>>Token válido, iniciando sesión del usuario");
+        console.log(">>>>>Token válido, iniciando sesión del usuario");
+        console.log(">>>>>Datos del usuario:", res);
+        console.log(">>>>>Nombre del usuario:", res.name);
+        console.log(">>>>>Email del usuario:", res.email);
+        console.log(">>>>>Avatar del usuario:", res.avatar);
+        setUserData(res);
         setIsLoggedIn(true);
-        setUserData(res.data.email);
+
+        setIsCheckingAuth(false);
         console.log(">>>>>>Usuario autenticado");
-        console.log("location.pathname:", location.pathname);
-        // Solo navegar a / si no estamos ya ahí
-        if (location.pathname !== "/") {
-          navigate("/");
-        }
+        const tok = getToken();
+        console.log("token recuperado:", tok);
       })
       .catch((err) => {
-        console.error(err);
+        console.error("Error al validar token:", err);
         setIsLoggedIn(false);
-        navigate("/signup");
+        setIsCheckingAuth(false);
       });
-    // }, [navigate, location.pathname]);
   }, []);
 
   return (
     <>
-      <div className="page">
-        <Header
-          isLoggedIn={isLoggedIn}
-          userData={userData}
-          handleOpenPopup={handleOpenPopup}
-          handleClosePopup={handleClosePopup}
-        />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Main
-                  handleUpdateUser={handleUpdateUser}
-                  handleUpdateAvatar={handleUpdateAvatar}
-                  handleClosePopup={handleClosePopup}
-                  handleOpenPopup={handleOpenPopup}
-                  popup={popup}
-                />
-              </ProtectedRoute>
-            }
+      {isCheckingAuth ? (
+        <div className="page">Verificando autenticación...</div>
+      ) : (
+        <div className="page">
+          <Header
+            isLoggedIn={isLoggedIn}
+            userData={userData}
+            handleOpenPopup={handleOpenPopup}
+            handleClosePopup={handleClosePopup}
+            handleLogout={handleLogout}
           />
-          {/* <Route
-            path="/signin"
-            element={<Signin handleLogin={handleLogin} />}
-          />
-          <Route
-            path="/signup"
-            element={<Signup handleRegistration={handleRegistration} />}
-          /> */}
-        </Routes>
-        <Footer />
-      </div>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <Main
+                    userData={userData}
+                    handleUpdateUser={handleUpdateUser}
+                    handleUpdateAvatar={handleUpdateAvatar}
+                    handleClosePopup={handleClosePopup}
+                    handleOpenPopup={handleOpenPopup}
+                    popup={popup}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/signin"
+              element={
+                isLoggedIn ? (
+                  <Navigate to="/" replace />
+                ) : (
+                  <Signin handleLogin={handleLogin} />
+                )
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                isLoggedIn ? (
+                  <Navigate to="/" replace />
+                ) : (
+                  <Signup handleRegistration={handleRegistration} />
+                )
+              }
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+          <Footer />
+        </div>
+      )}
     </>
   );
 }

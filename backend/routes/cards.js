@@ -17,9 +17,9 @@ const routerCards = express.Router();
 
 routerCards.get("/", getCards);
 routerCards.get("/:cardId", getCard);
-routerCards.post("/cards", validateBody(createCardSchema), createCard);
-routerCards.delete("/card/:cardId", deleteCard);
-routerCards.put("/cards/:cardId/likes", likeCard);
-routerCards.delete("/cards/:cardId/likes", dislikeCard);
+routerCards.post("/", validateBody(createCardSchema), createCard);
+routerCards.delete("/:cardId", deleteCard);
+routerCards.put("/:cardId/likes", likeCard);
+routerCards.delete("/:cardId/likes", dislikeCard);
 
 export default routerCards;

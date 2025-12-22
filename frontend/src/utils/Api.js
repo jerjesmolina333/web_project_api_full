@@ -8,8 +8,11 @@ export class Api {
   }
 
   getInfoUser() {
-    return fetch(this._linkUs)
+    console.log(">>>>Api.getInfoUser: Fetching user info from", this._linkUs);
+    console.log(">>>>Api.getInfoUser: Headers:", this._headers);
+    return fetch(this._linkUs, this._headers)
       .then(function (res) {
+        console.log(">>>>Api.getInfoUser: Response status:", res.status);
         return res.json();
       })
       .catch(function (error) {
@@ -18,7 +21,7 @@ export class Api {
   }
 
   getImagesList() {
-    return fetch(this._linkImags)
+    return fetch(this._linkImags, this._headers)
       .then(function (res) {
         return res.json();
       })
@@ -32,6 +35,7 @@ export class Api {
 
     return fetch(tempURL, {
       method: "PUT",
+      ...this._headers,
     })
       .then(function (res) {
         return res.json();
@@ -46,6 +50,7 @@ export class Api {
 
     return fetch(tempURL, {
       method: "DELETE",
+      ...this._headers,
     })
       .then(function (res) {
         return res.json();
@@ -60,6 +65,7 @@ export class Api {
 
     return fetch(tempURL, {
       method: "DELETE",
+      ...this._headers,
     })
       .then(function (res) {
         return res.json();
@@ -78,6 +84,7 @@ export class Api {
     const objParams = {
       method: "PATCH",
       headers: {
+        ...this._headers.headers,
         "Content-Type": "application/json",
       },
       body: jsonParam,
@@ -100,6 +107,7 @@ export class Api {
     const objParams = {
       method: "POST",
       headers: {
+        ...this._headers.headers,
         "Content-Type": "application/json",
       },
       body: jsonParam,
@@ -121,6 +129,7 @@ export class Api {
     const objParams = {
       method: "PATCH",
       headers: {
+        ...this._headers.headers,
         "Content-Type": "application/json",
       },
       body: jsonParam,

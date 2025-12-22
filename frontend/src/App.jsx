@@ -73,8 +73,14 @@ function App() {
           auth.validaToken(data.token).then((res) => {
             // Guarda el token en el almacenamiento local:
             setToken(data.token);
-
-            setUserData(res.data.email);
+            console.log(
+              ">>>>>Datos del usuario tras login y validación de token:",
+              res
+            );
+            console.log(">>>>>Nombre del usuario:", res.data.name);
+            console.log(">>>>>Email del usuario:", res.data.email);
+            console.log(">>>>>Avatar del usuario:", res.data.avatar);
+            setUserData(res.data);
             setIsLoggedIn(true);
             navigate("/");
           });
@@ -131,6 +137,7 @@ function App() {
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <Main
+                  userData={userData}
                   handleUpdateUser={handleUpdateUser}
                   handleUpdateAvatar={handleUpdateAvatar}
                   handleClosePopup={handleClosePopup}

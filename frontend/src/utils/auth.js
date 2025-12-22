@@ -56,7 +56,7 @@ export async function signin(email, password) {
 
     if (res.ok) {
       const data = await res.json();
-      console.log("✅ Signin - Success:", data);
+      console.log("✅ Signin - Success. Data:", data);
       return data;
     } else {
       const errorData = await res
@@ -83,6 +83,7 @@ export async function getUserInfo(token) {
     },
   });
   if (res.ok) return await res.json();
+
   throw new Error("Error al buscar al usuario");
 }
 

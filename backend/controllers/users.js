@@ -98,11 +98,12 @@ export async function getCurrentUser(req, res, next) {
   try {
     console.log("GetCurrentUser. req.user:", req.user);
     console.log("req.user._id:", req.user._id);
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id).select('+password -password');
     if (!user) {
+      console.log("Usuario no encontrado");
       throw new NotFoundError("Usuario no encontrado");
     }
-    res.send({ data: user });
+    res.send(user);
   } catch (err) {
     console.log("ERROR al obtener usuario actual:", err.message);
     next(err);
