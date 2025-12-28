@@ -1,24 +1,29 @@
 import { useState } from "react";
-import ImagePopup from "../../components/Popups/ImagePopup";
+import ImagePopup from "../../components/Main/components/Popup/ImagePopup/ImagePopup";
 
 import Trash from "../../../images/Trash.svg";
 import imgLike from "../../../images//Like.png";
-import api from "../../utils/Api.js";
 
 export default function Card(props) {
-  const { name, link, isLiked } = props;
+  const { name, link, isLiked, api } = props;
   const imageComponent = { title: "", children: null };
   const [imagePopup, setOpenImagePopup] = useState(null);
 
   async function handleCardLike(cID) {
+    console.log("🔵 Dando like a la card ID:", cID);
     // Envía una solicitud a la API y obtén los datos actualizados de la tarjeta
     await api
       .setCardLike(cID)
       .then((newCard) => {
+        console.log("🔵 Respuesta de setCardLike:", newCard);
         props.setCards((state) =>
-          state.map((currentCard) =>
-            currentCard._id === cID ? newCard : currentCard
-          )
+          state.map((currentCard) => {
+            if (currentCard._id === cID) {
+              console.log("🔵 Actualizando card:", currentCard._id);
+              return { ...currentCard, isLiked: true };
+            }
+            return currentCard;
+          })
         );
       })
       .catch((error) => console.error(error));
@@ -30,10 +35,15 @@ export default function Card(props) {
     await api
       .setCardNoLike(cID)
       .then((newCard) => {
+        console.log("🔵 Respuesta de setCardNoLike:", newCard);
         props.setCards((state) =>
-          state.map((currentCard) =>
-            currentCard._id === cID ? newCard : currentCard
-          )
+          state.map((currentCard) => {
+            if (currentCard._id === cID) {
+              console.log("🔵 Actualizando card:", currentCard._id);
+              return { ...currentCard, isLiked: false };
+            }
+            return currentCard;
+          })
         );
       })
       .catch((error) => console.error(error));

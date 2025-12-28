@@ -74,7 +74,17 @@ export default function Main(props) {
   const handleAddPlaceSubmit = (data) => {
     (async () => {
       await api.insertaImagen(data).then((newData) => {
-        const nuevosDatos = [newData, ...cards];
+        console.log("🔵 Respuesta de insertaImagen:", newData);
+        // Asegurarse de que la nueva tarjeta tenga todas las propiedades necesarias
+        const cardData = newData.data || newData; // Por si la estructura varía
+        const newCard = {
+          name: cardData.name,
+          link: cardData.link,
+          _id: cardData._id,
+          isLiked: cardData.isLiked || false,
+        };
+        console.log("🔵 Nueva tarjeta formateada:", newCard);
+        const nuevosDatos = [newCard, ...cards];
         setCards(nuevosDatos);
       });
     })();
@@ -91,7 +101,7 @@ export default function Main(props) {
   };
 
   const editAvatarPopup = {
-    title: "Editar avatar",
+    title: "Edición de avatar",
     children: (
       <EditAvatar
         currentUser={props.userData}
@@ -114,7 +124,10 @@ export default function Main(props) {
             <img
               src={imgEdAvatar}
               className="profile__img-edit-avatar"
-              onClick={() => props.handleOpenPopup(editAvatarPopup)}
+              onClick={(e) => {
+                e.stopPropagation();
+                props.handleOpenPopup(editAvatarPopup);
+              }}
             />
           </div>
 
@@ -156,6 +169,7 @@ export default function Main(props) {
               onCardDelete={onCardDelete}
               setCards={setCards}
               onClose={props.handleClosePopup}
+              api={api}
             />
           ))}
         </ul>

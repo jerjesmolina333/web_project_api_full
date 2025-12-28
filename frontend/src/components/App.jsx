@@ -10,11 +10,6 @@ import Signup from "./Signup/Signup.jsx";
 import * as auth from "../utils/auth.js";
 import Api from "../utils/Api.js";
 import { setToken, getToken, removeToken } from "../utils/token.js";
-import MensajeNoOK from "./Popups/MensajeNoOK.jsx";
-import RegisterOK from "./Popups/RegisterOK.jsx";
-// import imgNoOK from "../../images/ImgNoOK.png";
-
-// import EditAvatar from "./Popups/EditAvatar.jsx";
 
 function App() {
   const [userData, setUserData] = useState("");
@@ -73,28 +68,8 @@ function App() {
     })();
   };
 
-  function handleClosePopup(popup) {
+  function handleClosePopup() {
     setPopup(null);
-  }
-
-  function abreMensajeError() {
-    console.log("🔵 abreMensajeError llamada en App.jsx");
-    setPopup(null);
-    try {
-      handleOpenPopup({
-        children: <MensajeNoOK handleClosePopup={handleClosePopup} />,
-      });
-      console.log("✅ handleOpenPopup ejecutado");
-    } catch (error) {
-      console.error("❌ Error en abreMensajeError:", error);
-    }
-  }
-  function abreRegExitoso() {
-    console.log("🔵 abreRegExitoso llamada");
-    handleOpenPopup({
-      children: <RegisterOK handleClosePopup={handleClosePopup} />,
-    });
-    console.log("✅ RegisterOK popup abierto");
   }
 
   const handleRegistration = ({ name, password, email, about, avatar }) => {
@@ -232,11 +207,6 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
           <Footer />
-          {popup && (
-            <div className="modal-overlay" onClick={handleClosePopup}>
-              <div onClick={(e) => e.stopPropagation()}>{popup.children}</div>
-            </div>
-          )}
         </div>
       )}
     </>

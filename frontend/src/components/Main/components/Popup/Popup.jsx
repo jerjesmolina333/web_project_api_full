@@ -17,7 +17,7 @@ export default function Popup(props) {
       <div className="modal-overlay">
         <div className="popup__container">
           <img
-            className="popup__cerrar"
+            className="popup__cerrar-overlay"
             src={btnCerrar}
             alt="Imagen botón cerrar"
             onClick={() => cierraVentanaBoton()}

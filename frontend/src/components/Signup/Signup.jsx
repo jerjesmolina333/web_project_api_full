@@ -30,7 +30,7 @@ const Signup = ({ handleRegistration, handleOpenPopup }) => {
           className="popup__cerrar"
           src={btnCerrar}
           alt="Imagen botón cerrar"
-          // onClick={() => cierraVentanaBoton()}
+          onClick={() => navigate("/")}
         />
         <div className="popup__heading">
           <h3>Regístrate</h3>
