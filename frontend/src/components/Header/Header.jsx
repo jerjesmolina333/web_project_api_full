@@ -8,7 +8,6 @@ function Header(props) {
         {props.isLoggedIn && (
           <>
             <div className="header__info">
-              {/* {props.userData?.email || props.userData} */}
               {props.userData?.email || ""}
               <p onClick={props.handleLogout} className="header__link">
                 Cerrar Sesión

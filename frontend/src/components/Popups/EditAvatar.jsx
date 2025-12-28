@@ -1,19 +1,12 @@
 import React from "react";
-// import { useState, useContext, useRef } from "react";
-// import { CurrentUserContext } from "../../../../../contexts/CurrentUserContext";
 
 export default function EditAvatar() {
-  // suscribirse a CurrentUserContext
-  // const currentUser = useContext(CurrentUserContext);
-  // const [avatar, setAvatar] = useState(currentUser.avatar);
-  // const avatarRef = React.useRef(avatar);
-
   const handleAvatarChange = (evt) => {
     setAvatar(evt.target.value);
   };
 
   const handleSubmit = (evt) => {
-    evt.preventDefault(); // Evita el comportamiento predeterminado del envío de formularios
+    evt.preventDefault();
     props.handleUpdateAvatar({
       // Actualiza la información del usuario
       avatar: avatarRef.current.value,

@@ -1,5 +1,3 @@
-const initialImages = [];
-
 export class Api {
   constructor({ linkUser, linkImags }, headers) {
     this._linkUs = linkUser || import.meta.env.VITE_API_USER_URL;

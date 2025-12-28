@@ -39,10 +39,12 @@ export async function signup(name, password, email, about, avatar) {
 }
 
 // La función de autorización acepta los datos necesarios como parámetros.
-export async function signin(email, password) {
+export async function signin(props) {
   try {
+    const { password, email } = props;
     console.log("🔵 Signin - URL:", `${BASE_URL}signin`);
     console.log("🔵 Signin - Email:", email);
+    console.log("🔵 Signin - abreMensajeError:", typeof props.abreMensajeError);
 
     const res = await fetch(`${BASE_URL}signin`, {
       method: "POST",
@@ -63,12 +65,61 @@ export async function signin(email, password) {
         .json()
         .catch(() => ({ message: res.statusText }));
       console.error("❌ Signin - Error:", res.status, errorData);
+
+      // Llamar al callback de error si existe
+      console.log("🟡 Verificando abreMensajeError...");
+      console.log(
+        "🟡 props.abreMensajeError existe:",
+        !!props.abreMensajeError
+      );
+      console.log(
+        "🟡 Tipo:",
+        typeof props.abreMensajeError(props.handleClosePopup)
+      );
+
+      if (
+        props.abreMensajeError &&
+        typeof props.abreMensajeError === "function"
+      ) {
+        console.log("✅ Ejecutando abreMensajeError...");
+        try {
+          props.abreMensajeError();
+          console.log("✅ abreMensajeError ejecutado exitosamente");
+        } catch (callbackError) {
+          console.error(
+            "❌ Error al ejecutar abreMensajeError:",
+            callbackError
+          );
+        }
+      } else {
+        console.log("❌ abreMensajeError NO cumple las condiciones");
+      }
+
       throw new Error(
         errorData.message || `Error ${res.status}: ${res.statusText}`
       );
     }
   } catch (err) {
     console.error("❌ Signin - Exception:", err);
+
+    // Llamar al callback de error en caso de excepción
+    console.log("🟡 En catch - Verificando abreMensajeError...");
+    if (
+      props?.abreMensajeError &&
+      typeof props.abreMensajeError === "function"
+    ) {
+      console.log("✅ En catch - Ejecutando abreMensajeError...");
+      try {
+        props.abreMensajeError(err.message || "Error al identificar usuario");
+        console.log("✅ En catch - abreMensajeError ejecutado");
+      } catch (callbackError) {
+        console.error(
+          "❌ En catch - Error al ejecutar abreMensajeError:",
+          callbackError
+        );
+      }
+    }
+
     throw new Error(err.message || "Error al identificar usuario");
   }
 }

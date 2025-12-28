@@ -1,10 +1,10 @@
-import btnCerrar from "../../../../../../images/BotonCerrar.png";
+import btnCerrar from "../../../images/BotonCerrar.png";
 
 export default function ImagePopup(props) {
   const { onClose, link } = props;
   function cierraVentanaBoton() {
-    debugger;
-    props.onCloseImg();
+    alert("Cerrando ventana emergente");
+    props.handleClosePopup();
   }
   return (
     <div className="modal-overlay">

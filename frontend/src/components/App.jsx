@@ -1,24 +1,20 @@
 import { useState, useEffect } from "react";
-import {
-  Routes,
-  Route,
-  Navigate,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
-import Header from "../components/Header/Header.jsx";
-import Main from "../components/Main/Main.jsx";
-import Footer from "../components/Footer/Footer.jsx";
-import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute.jsx";
-import Signin from "../components/Signin/Signin.jsx";
-import Signup from "../components/Signup/Signup.jsx";
-import * as auth from "../utils/auth";
+import Header from "./Header/Header.jsx";
+import Main from "./Main/Main.jsx";
+import Footer from "./Footer/Footer.jsx";
+import ProtectedRoute from "./ProtectedRoute/ProtectedRoute.jsx";
+import Signin from "./Signin/Signin.jsx";
+import Signup from "./Signup/Signup.jsx";
+import * as auth from "../utils/auth.js";
 import Api from "../utils/Api.js";
 import { setToken, getToken, removeToken } from "../utils/token.js";
-// import Popup from "../components/Popup.jsx";
+import MensajeNoOK from "./Popups/MensajeNoOK.jsx";
+import RegisterOK from "./Popups/RegisterOK.jsx";
+// import imgNoOK from "../../images/ImgNoOK.png";
 
-import EditAvatar from "./Popups/EditAvatar.jsx";
+// import EditAvatar from "./Popups/EditAvatar.jsx";
 
 function App() {
   const [userData, setUserData] = useState("");
@@ -26,7 +22,7 @@ function App() {
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [popup, setPopup] = useState(null);
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
 
   const handleUpdateUser = (data) => {
     const jwt = getToken();
@@ -53,6 +49,7 @@ function App() {
   };
 
   const handleUpdateAvatar = (data) => {
+    console.log("App.jsx: handleUpdateAvatar llamado");
     const jwt = getToken();
     const params = {
       headers: {
@@ -80,48 +77,64 @@ function App() {
     setPopup(null);
   }
 
+  function abreMensajeError() {
+    console.log("🔵 abreMensajeError llamada en App.jsx");
+    setPopup(null);
+    try {
+      handleOpenPopup({
+        children: <MensajeNoOK handleClosePopup={handleClosePopup} />,
+      });
+      console.log("✅ handleOpenPopup ejecutado");
+    } catch (error) {
+      console.error("❌ Error en abreMensajeError:", error);
+    }
+  }
+  function abreRegExitoso() {
+    console.log("🔵 abreRegExitoso llamada");
+    handleOpenPopup({
+      children: <RegisterOK handleClosePopup={handleClosePopup} />,
+    });
+    console.log("✅ RegisterOK popup abierto");
+  }
+
   const handleRegistration = ({ name, password, email, about, avatar }) => {
     try {
       auth.signup(name, password, email, about, avatar).then(() => {
-        navigate("/signin");
+        console.log("✅ Registro exitoso");
+        // Aquí abrir la ventana de éxito en el registro
+        abreRegExitoso();
+        // Esperar 2 segundos antes de navegar para que el usuario vea el popup
+        setTimeout(() => {
+          navigate("/signin");
+        }, 2000);
       });
     } catch (err) {
+      abreMensajeError();
       console.error(err);
     }
   };
 
-  const handleLogin = ({ email, password }) => {
+  const handleLogin = async ({ email, password }) => {
     if (!email || !password) {
       return;
     }
 
     try {
-      auth.signin(email, password).then((data) => {
-        try {
-          auth.validaToken(data.token).then((res) => {
-            // Guarda el token en el almacenamiento local:
-            setToken(data.token);
-            // console.log("token guardado:", data.token);
-            // console.log("datos del usuario:", res.data);
-            // console.log("data.name: ", res.data.name);
-            // console.log("data.email: ", res.data.email);
-            // console.log("data.avatar: ", res.data.avatar);
-            setUserData(res.data);
-            setIsLoggedIn(true);
-            navigate("/");
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      });
+      console.log(
+        "🔵 App.jsx - Calling signin with abreMensajeError:",
+        typeof abreMensajeError
+      );
+      const data = await auth.signin({ email, password, abreMensajeError });
+      const res = await auth.validaToken(data.token);
+      // Guarda el token en el almacenamiento local:
+      setToken(data.token);
+      setUserData(res.data);
+      setIsLoggedIn(true);
+      navigate("/");
     } catch (err) {
-      console.error(err);
+      console.error("❌ App.jsx - Error en handleLogin:", err);
+      abreMensajeError();
     }
-  };
-
-  const editAvatarPopup = {
-    title: "Editar avatar",
-    children: <EditAvatar />,
   };
 
   function handleOpenPopup(popup) {
@@ -147,16 +160,8 @@ function App() {
     auth
       .getUserInfo(jwt)
       .then((res) => {
-        // console.log(">>>>>Token válido, iniciando sesión del usuario");
-        // console.log(">>>>>Datos del usuario completos:", res);
-        // console.log(">>>>>Estructura res.data:", res.data);
-
         // Manejar si los datos vienen en res.data o directamente en res
         const userData = res.data || res;
-
-        // console.log(">>>>>Nombre del usuario:", userData.name);
-        // console.log(">>>>>Email del usuario:", userData.email);
-        // console.log(">>>>>Avatar del usuario:", userData.avatar);
 
         setUserData(userData);
         setIsLoggedIn(true);
@@ -172,6 +177,7 @@ function App() {
 
   return (
     <>
+      {<p onClick={abreMensajeError}>Abrir mensaje error</p>}
       {isCheckingAuth ? (
         <div className="page">Verificando autenticación...</div>
       ) : (
@@ -203,7 +209,10 @@ function App() {
                 isLoggedIn ? (
                   <Navigate to="/" replace />
                 ) : (
-                  <Signin handleLogin={handleLogin} />
+                  <Signin
+                    handleLogin={handleLogin}
+                    handleClosePopup={handleClosePopup}
+                  />
                 )
               }
             />
@@ -213,13 +222,21 @@ function App() {
                 isLoggedIn ? (
                   <Navigate to="/" replace />
                 ) : (
-                  <Signup handleRegistration={handleRegistration} />
+                  <Signup
+                    handleRegistration={handleRegistration}
+                    handleOpenPopup={handleOpenPopup}
+                  />
                 )
               }
             />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
           <Footer />
+          {popup && (
+            <div className="modal-overlay" onClick={handleClosePopup}>
+              <div onClick={(e) => e.stopPropagation()}>{popup.children}</div>
+            </div>
+          )}
         </div>
       )}
     </>

@@ -1,27 +1,22 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Popup from "../Main/components/Popup/Popup";
 import EditAvatar from "../Main/components/Popup/EditAvatar/EditAvatar";
 import EditProfile from "./components/Popup/EditProfile/EditProfile";
-import Card from "../Main/components/Card/Card";
+import Card from "../../components/Card/Card";
 import NewCard from "./components/Popup/NewCard/NewCard";
 import Api from "../../utils/Api";
 import { getToken } from "../../utils/token";
-
-import {
-  CurrentUserContext,
-  currentUser,
-} from "../../../src/contexts/CurrentUserContext";
 
 import imgEdAvatar from "../../../images/Icono_ed_avatar.png";
 import imgAddButton from "../../../images/AddButton.png";
 import imgEdButton from "../../../images/EditButton.png";
 
 export default function Main(props) {
-  const [popup, setPopup] = useState(null);
+  // const [popup, setPopup] = useState(null);
   const [cards, setCards] = useState([]);
 
   // Usar los datos del usuario que vienen de App.jsx
-  const currentUser = props.userData || {};
+  // const currentUser = props.userData || {};
 
   const jwt = getToken();
   // console.log("🔵 Main.jsx - JWT Token:", jwt);
@@ -108,12 +103,6 @@ export default function Main(props) {
 
   return (
     <>
-      {/* {console.log(">>>>>>>>Renderizando Main...")}
-      {console.log("User Data from props:", props.userData)}
-      {console.log("User avatar from props:", props.userData?.avatar)}
-      {console.log("User name from props:", props.userData?.name)}
-      {console.log("currentUser:", currentUser)} */}
-
       <main className="page">
         <div className="profile">
           <div className="profile__container-imgs">

@@ -2,7 +2,6 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import btnCerrar from "../../../images/BotonCerrar.png";
-import { getToken, setToken } from "../../utils/token";
 
 const Signin = ({ handleLogin }) => {
   const navigate = useNavigate();
@@ -30,7 +29,7 @@ const Signin = ({ handleLogin }) => {
     <div className="page">
       <div className="modal-overlay">
         <img
-          className="popup__cerrar"
+          className="popup__cerrar-overlay"
           src={btnCerrar}
           alt="Imagen botón cerrar"
           // onClick={() => cierraVentanaBoton()}

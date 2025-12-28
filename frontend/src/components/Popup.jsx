@@ -3,7 +3,7 @@ import btnCerrar from "../../images/BotonCerrar.png";
 export default function Popup(props) {
   // se ha desestructurado onClose de props
   //los hijos son el contenido de la ventana emergente
-  const { onClose, title, children } = props;
+  const { title, children } = props;
 
   function cierraVentanaBoton() {
     console.log("Cerrando ventana emergente");

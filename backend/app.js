@@ -31,6 +31,7 @@ const corsOptions = {
   origin: [
     "https://jerjesm.online",
     "https://www.jerjesm.online",
+    "https://api.jerjesm.online",
     "http://localhost:5173",
     "http://localhost:3000",
   ],

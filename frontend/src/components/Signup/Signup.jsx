@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import btnCerrar from "../../../images//BotonCerrar.png";
 
-const Signup = ({ handleRegistration }) => {
+const Signup = ({ handleRegistration, handleOpenPopup }) => {
   const navigate = useNavigate();
   const [data, setData] = useState({
     email: "",

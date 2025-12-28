@@ -1,12 +1,11 @@
-import { useState } from "react";
-import btnCerrar from "../../../images//BotonCerrar.png";
-import btnNoOK from "../../../images/BotonNoOK.png";
+import imgNoOK from "../../../images/imgNoOK.png";
+import btnCerrar from "../../../images/BotonCerrar.png";
 
 const MensajeNoOK = (props) => {
   function cierraVentanaBoton() {
+    alert("Cerrando ventana emergente");
     props.handleClosePopup();
   }
-
   return (
     <div className="modal__message">
       <img
@@ -16,10 +15,10 @@ const MensajeNoOK = (props) => {
         onClick={() => cierraVentanaBoton()}
       />
       <div>
-        <img className="popup__img" src={btnNoOK} alt="Imagen No OK" />
+        <img className="popup__img" src={imgNoOK} alt="Imagen No OK" />
       </div>
-      <div className="popup__heading">
-        <h3>Huy, algo salió mal. Por favor, inténtalo de nuevo</h3>
+      <div className="popup__message">
+        <p>Huy, algo salió mal. Por favor, inténtalo de nuevo.</p>
       </div>
     </div>
   );
