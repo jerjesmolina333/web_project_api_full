@@ -8,10 +8,9 @@ import api from "../../utils/Api.js";
 export default function Card(props) {
   const { name, link, isLiked } = props;
   const imageComponent = { title: "", children: null };
-  const [cardLiked, setCardLiked] = useState(isLiked);
   const [imagePopup, setOpenImagePopup] = useState(null);
 
-  async function handleCardLike(cID, setCards) {
+  async function handleCardLike(cID) {
     // Envía una solicitud a la API y obtén los datos actualizados de la tarjeta
     await api
       .setCardLike(cID)
@@ -23,11 +22,11 @@ export default function Card(props) {
         );
       })
       .catch((error) => console.error(error));
-    setCardLiked(true);
   }
 
   async function handleCardNoLike(cID) {
     // Envía una solicitud a la API y obtén los datos actualizados de la tarjeta
+    console.log("🔵 Removiendo like de la card ID:", cID);
     await api
       .setCardNoLike(cID)
       .then((newCard) => {
@@ -38,10 +37,10 @@ export default function Card(props) {
         );
       })
       .catch((error) => console.error(error));
-    setCardLiked(false);
   }
 
-  const handleLike = (isLiked) => {
+  const handleLike = () => {
+    console.log("🔵 handleLike - isLiked:", isLiked);
     isLiked ? handleCardNoLike(props.clave) : handleCardLike(props.clave);
   };
 
@@ -79,7 +78,7 @@ export default function Card(props) {
             className={cardLikeButtonClassName}
             src={imgLike}
             alt="Imagen like"
-            onClick={() => handleLike(isLiked, props.clave)}
+            onClick={handleLike}
           />
         </div>
       </li>

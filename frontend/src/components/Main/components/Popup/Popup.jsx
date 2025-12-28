@@ -22,9 +22,7 @@ export default function Popup(props) {
             alt="Imagen botón cerrar"
             onClick={() => cierraVentanaBoton()}
           />
-          <div className={`${title ? "popup__heading" : ""}`}>
-            <h3>{title}</h3>
-          </div>
+          {title && <p className="popup__heading">{title}</p>}
           {children}
         </div>
       </div>

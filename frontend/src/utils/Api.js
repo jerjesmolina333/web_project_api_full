@@ -28,7 +28,9 @@ export class Api {
   }
 
   setCardLike(id) {
+    console.log("🔵 Api.setCardLike: Liking card ID:", id);
     const tempURL = `${this._linkImags}${id}/likes`;
+    console.log("🔵 Api.setCardLike: URL:", tempURL);
 
     return fetch(tempURL, {
       method: "PUT",
@@ -43,7 +45,9 @@ export class Api {
   }
 
   setCardNoLike(id) {
+    console.log("🔵 Api.setCardNoLike: Removing like from card ID:", id);
     const tempURL = `${this._linkImags}${id}/likes`;
+    console.log("🔵 Api.setCardNoLike: URL:", tempURL);
 
     return fetch(tempURL, {
       method: "DELETE",

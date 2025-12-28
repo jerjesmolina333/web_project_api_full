@@ -177,7 +177,7 @@ function App() {
 
   return (
     <>
-      {<p onClick={abreMensajeError}>Abrir mensaje error</p>}
+      {/* {<p onClick={abreMensajeError}>Abrir mensaje error</p>} */}
       {isCheckingAuth ? (
         <div className="page">Verificando autenticación...</div>
       ) : (

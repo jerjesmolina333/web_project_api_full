@@ -48,7 +48,7 @@ export async function likeCard(req, res) {
     }
     const updated = await Card.findByIdAndUpdate(
       req.params.cardId,
-      { $addToSet: { likes: req.user._id } },
+      { isLiked: true },
       { new: true }
     );
     res.send({ data: updated });
@@ -72,7 +72,7 @@ export async function dislikeCard(req, res) {
     }
     const updated = await Card.findByIdAndUpdate(
       req.params.cardId,
-      { $pull: { likes: req.user._id } },
+      { isLiked: false },
       { new: true }
     );
     res.send({ data: updated });
