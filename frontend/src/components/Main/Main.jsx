@@ -12,15 +12,9 @@ import imgAddButton from "../../../images/AddButton.png";
 import imgEdButton from "../../../images/EditButton.png";
 
 export default function Main(props) {
-  // const [popup, setPopup] = useState(null);
   const [cards, setCards] = useState([]);
 
-  // Usar los datos del usuario que vienen de App.jsx
-  // const currentUser = props.userData || {};
-
   const jwt = getToken();
-  // console.log("🔵 Main.jsx - JWT Token:", jwt);
-  // console.log("🔵 Main.jsx - userData from props:", props.userData);
 
   const params = {
     headers: {
@@ -40,9 +34,7 @@ export default function Main(props) {
   useEffect(() => {
     async function getCards() {
       try {
-        // console.log("🔵 Fetching cards...");
         const cardsList = await api.getImagesList();
-        // console.log("✅ Cards loaded:", cardsList);
         setCards(cardsList);
       } catch (error) {
         console.error("❌ Error loading cards:", error);
@@ -74,8 +66,6 @@ export default function Main(props) {
   const handleAddPlaceSubmit = (data) => {
     (async () => {
       await api.insertaImagen(data).then((newData) => {
-        console.log("🔵 Respuesta de insertaImagen:", newData);
-        // Asegurarse de que la nueva tarjeta tenga todas las propiedades necesarias
         const cardData = newData.data || newData; // Por si la estructura varía
         const newCard = {
           name: cardData.name,
@@ -83,7 +73,6 @@ export default function Main(props) {
           _id: cardData._id,
           isLiked: cardData.isLiked || false,
         };
-        console.log("🔵 Nueva tarjeta formateada:", newCard);
         const nuevosDatos = [newCard, ...cards];
         setCards(nuevosDatos);
       });

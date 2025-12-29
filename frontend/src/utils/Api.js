@@ -6,8 +6,6 @@ export class Api {
   }
 
   getInfoUser() {
-    // console.log(">>>>Api.getInfoUser: Fetching user info from", this._linkUs);
-    // console.log(">>>>Api.getInfoUser: Headers:", this._headers);
     return fetch(this._linkUs, this._headers)
       .then(function (res) {
         return res.json();
@@ -28,9 +26,7 @@ export class Api {
   }
 
   setCardLike(id) {
-    console.log("🔵 Api.setCardLike: Liking card ID:", id);
     const tempURL = `${this._linkImags}${id}/likes`;
-    console.log("🔵 Api.setCardLike: URL:", tempURL);
 
     return fetch(tempURL, {
       method: "PUT",
@@ -45,9 +41,7 @@ export class Api {
   }
 
   setCardNoLike(id) {
-    console.log("🔵 Api.setCardNoLike: Removing like from card ID:", id);
     const tempURL = `${this._linkImags}${id}/likes`;
-    console.log("🔵 Api.setCardNoLike: URL:", tempURL);
 
     return fetch(tempURL, {
       method: "DELETE",
@@ -78,14 +72,7 @@ export class Api {
 
   _actualizaUsuario(data) {
     const tempURL = `${this._linkUs}`;
-    console.log(">>>>Api.actualizaUsuario: Updating user info at", tempURL);
-    console.log(">>>>Api.actualizaUsuario: Data:", data);
-    console.log(">>>>Api.actualizaUsuario: this._headers:", this._headers);
-    console.log(">>>>Api.actualizaUsuario: tempURL:", tempURL);
-    console.log(
-      ">>>>Api.actualizaUsuario: this._headers.headers:",
-      this._headers.headers
-    );
+
 
     const jsonParam = JSON.stringify({
       name: data.name,
@@ -101,15 +88,9 @@ export class Api {
       body: jsonParam,
     };
 
-    console.log(">>>>Api.actualizaUsuario: objParams:", objParams);
-    console.log(
-      ">>>>Api.actualizaUsuario: objParams.headers:",
-      objParams.headers
-    );
 
     return fetch(tempURL, objParams)
       .then(function (res) {
-        console.log(">>>>Api.actualizaUsuario: Response status:", res.status);
         if (!res.ok) {
           return res.text().then((text) => {
             console.error(">>>>Api.actualizaUsuario: Error response:", text);
@@ -119,7 +100,6 @@ export class Api {
         return res.json();
       })
       .then(function (result) {
-        console.log(">>>>Api.actualizaUsuario: Response data:", result);
         return result;
       })
       .catch(function (error) {
@@ -153,8 +133,6 @@ export class Api {
 
   _actualizaAvatar(data) {
     const tempURL = `${this._linkUs}/avatar`;
-    console.log(">>>>Api.actualizaAvatar: URL:", tempURL);
-    console.log(">>>>Api.actualizaAvatar: Headers:", this._headers.headers);
 
     const jsonParam = JSON.stringify({
       avatar: data.avatar,
@@ -171,7 +149,6 @@ export class Api {
 
     return fetch(tempURL, objParams)
       .then(function (res) {
-        console.log(">>>>Api.actualizaAvatar: Response status:", res.status);
         if (!res.ok) {
           return res.text().then((text) => {
             console.error(">>>>Api.actualizaAvatar: Error response:", text);
@@ -181,11 +158,9 @@ export class Api {
         return res.json();
       })
       .then(function (result) {
-        console.log(">>>>Api.actualizaAvatar: Response data:", result);
         return result;
       })
       .catch(function (error) {
-        console.error(">>>>Api.actualizaAvatar: Error:", error);
         return Promise.reject(`Error: ${error}`);
       });
   }

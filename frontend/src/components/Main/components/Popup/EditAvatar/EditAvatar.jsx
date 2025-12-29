@@ -1,10 +1,7 @@
 import React from "react";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 export default function EditAvatar(props) {
-  console.log("🔵 EditAvatar.jsx - props:", props);
-  console.log("🔵 EditAvatar.jsx - currentUser:", props.currentUser);
-
   const currentUser = props.currentUser || {};
   const [avatar, setAvatar] = useState(currentUser.avatar || "");
   const avatarRef = React.useRef(avatar);

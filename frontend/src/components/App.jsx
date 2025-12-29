@@ -17,7 +17,6 @@ function App() {
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [popup, setPopup] = useState(null);
   const navigate = useNavigate();
-  // const location = useLocation();
 
   const handleUpdateUser = (data) => {
     const jwt = getToken();
@@ -42,9 +41,23 @@ function App() {
       });
     })();
   };
+  function abreRegExitoso() {
+    handleOpenPopup({
+      children: <RegisterOK handleClosePopup={handleClosePopup} />,
+    });
+  }
+  function abreMensajeError() {
+    setPopup(null);
+    try {
+      handleOpenPopup({
+        children: <MensajeNoOK handleClosePopup={handleClosePopup} />,
+      });
+    } catch (error) {
+      console.error("❌ Error en abreMensajeError:", error);
+    }
+  }
 
   const handleUpdateAvatar = (data) => {
-    console.log("App.jsx: handleUpdateAvatar llamado");
     const jwt = getToken();
     const params = {
       headers: {
@@ -75,7 +88,6 @@ function App() {
   const handleRegistration = ({ name, password, email, about, avatar }) => {
     try {
       auth.signup(name, password, email, about, avatar).then(() => {
-        console.log("✅ Registro exitoso");
         // Aquí abrir la ventana de éxito en el registro
         abreRegExitoso();
         // Esperar 2 segundos antes de navegar para que el usuario vea el popup
@@ -95,10 +107,10 @@ function App() {
     }
 
     try {
-      console.log(
-        "🔵 App.jsx - Calling signin with abreMensajeError:",
-        typeof abreMensajeError
-      );
+      // console.log(
+      //   "🔵 App.jsx - Calling signin with abreMensajeError:",
+      //   typeof abreMensajeError
+      // );
       const data = await auth.signin({ email, password, abreMensajeError });
       const res = await auth.validaToken(data.token);
       // Guarda el token en el almacenamiento local:
@@ -141,7 +153,6 @@ function App() {
         setUserData(userData);
         setIsLoggedIn(true);
         setIsCheckingAuth(false);
-        // console.log(">>>>>>Usuario autenticado");
       })
       .catch((err) => {
         console.error("Error al validar token:", err);
@@ -152,7 +163,6 @@ function App() {
 
   return (
     <>
-      {/* {<p onClick={abreMensajeError}>Abrir mensaje error</p>} */}
       {isCheckingAuth ? (
         <div className="page">Verificando autenticación...</div>
       ) : (

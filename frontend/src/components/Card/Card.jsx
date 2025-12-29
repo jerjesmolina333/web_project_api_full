@@ -10,16 +10,13 @@ export default function Card(props) {
   const [imagePopup, setOpenImagePopup] = useState(null);
 
   async function handleCardLike(cID) {
-    console.log("🔵 Dando like a la card ID:", cID);
     // Envía una solicitud a la API y obtén los datos actualizados de la tarjeta
     await api
       .setCardLike(cID)
       .then((newCard) => {
-        console.log("🔵 Respuesta de setCardLike:", newCard);
         props.setCards((state) =>
           state.map((currentCard) => {
             if (currentCard._id === cID) {
-              console.log("🔵 Actualizando card:", currentCard._id);
               return { ...currentCard, isLiked: true };
             }
             return currentCard;
@@ -31,15 +28,12 @@ export default function Card(props) {
 
   async function handleCardNoLike(cID) {
     // Envía una solicitud a la API y obtén los datos actualizados de la tarjeta
-    console.log("🔵 Removiendo like de la card ID:", cID);
     await api
       .setCardNoLike(cID)
       .then((newCard) => {
-        console.log("🔵 Respuesta de setCardNoLike:", newCard);
         props.setCards((state) =>
           state.map((currentCard) => {
             if (currentCard._id === cID) {
-              console.log("🔵 Actualizando card:", currentCard._id);
               return { ...currentCard, isLiked: false };
             }
             return currentCard;
@@ -50,7 +44,6 @@ export default function Card(props) {
   }
 
   const handleLike = () => {
-    console.log("🔵 handleLike - isLiked:", isLiked);
     isLiked ? handleCardNoLike(props.clave) : handleCardLike(props.clave);
   };
 
