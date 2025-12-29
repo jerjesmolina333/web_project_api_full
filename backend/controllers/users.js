@@ -43,13 +43,11 @@ export const createUser = async (req, res) => {
 
 export async function login(req, res) {
   const { email, password } = req.body;
-  console.log("===== PROCESO LOGIN -> email: ", email, " password: ", password);
 
   // 1. Buscar usuario por email
   User.findOne({ email })
     .select("+password")
     .then((user) => {
-      console.log("Usuario encontrado:", user); // NUEVO LOG
       if (!user) {
         console.log("Usuario no encontrado");
         return res
@@ -66,7 +64,6 @@ export async function login(req, res) {
         }
 
         // 3. Crear JWT
-        console.log("CREDENCIALES CORRECTAS!!, creando token");
         const token = jwt.sign(
           { _id: user._id },
           NODE_ENV === "production" ? JWT_SECRET : "frase-secreta",
@@ -83,7 +80,6 @@ export async function login(req, res) {
 }
 
 export async function getUsers(req, res) {
-  console.log("GetUsers. req.user:", req.user);
   try {
     const usersList = await User.find();
     res.send(usersList);
@@ -96,8 +92,6 @@ export async function getUsers(req, res) {
 
 export async function getCurrentUser(req, res, next) {
   try {
-    console.log("GetCurrentUser. req.user:", req.user);
-    console.log("req.user._id:", req.user._id);
     const user = await User.findById(req.user._id).select(
       "+password -password"
     );
@@ -127,11 +121,6 @@ export async function getUser(req, res, next) {
 }
 
 export async function updateUser(req, res, next) {
-  console.log(">>>>>>UpdateUser. req.user:", req.user);
-  console.log("req.body:", req.body);
-  console.log("req.user._id:", req.user._id);
-  console.log("req.body.name:", req.body.name);
-  console.log("req.body.about:", req.body.about);
   try {
     const { name, about } = req.body;
     const user = await User.findByIdAndUpdate(
@@ -151,8 +140,6 @@ export async function updateUser(req, res, next) {
 
 export async function updateAvatar(req, res, next) {
   try {
-    console.log("UpdateAvatar. req.user:", req.user);
-    console.log("req.body:", req.body);
     const { avatar } = req.body;
     const user = await User.findByIdAndUpdate(
       req.user._id,

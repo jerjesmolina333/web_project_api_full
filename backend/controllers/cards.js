@@ -1,7 +1,6 @@
 import Card from "../models/card.js";
 
 export async function getCards(req, res) {
-  console.log("==== GET CARDS ====");
   try {
     const cardsList = await Card.find({ owner: req.user._id });
     res.send(cardsList);
@@ -13,9 +12,7 @@ export async function getCards(req, res) {
 }
 
 export async function getCard(req, res) {
-  console.log("getCard====");
   const id = req.params.cardId;
-  console.log("elId: " + id);
 
   try {
     const card = await Card.findById(id);
@@ -35,7 +32,6 @@ export async function getCard(req, res) {
 }
 
 export async function likeCard(req, res) {
-  console.log("==== LIKE CARD ====");
   try {
     const card = await Card.findById(req.params.cardId);
     if (!card) {
@@ -59,7 +55,6 @@ export async function likeCard(req, res) {
 }
 
 export async function dislikeCard(req, res) {
-  console.log("==== DISLIKE CARD ====");
   try {
     const card = await Card.findById(req.params.cardId);
     if (!card) {
@@ -83,16 +78,12 @@ export async function dislikeCard(req, res) {
 }
 
 export async function createCard(req, res) {
-  console.log("==== CREATE CARD ====");
-  console.log("req.user:", req.user);
-  console.log("req.body:", req.body);
 
   const { name, link } = req.body;
   const owner = req.user._id; // El owner es el usuario autenticado
 
   Card.create({ name, link, owner })
     .then((card) => {
-      console.log("Tarjeta creada exitosamente:", card);
       res.status(201).send({ data: card });
     })
     .catch((err) => {
@@ -105,8 +96,6 @@ export async function createCard(req, res) {
 
 export async function deleteCard(req, res) {
   const id = req.params.cardId;
-  console.log("==== DELETE CARD ====");
-  console.log("Id por eliminar: " + id);
 
   try {
     const card = await Card.findById(id);
